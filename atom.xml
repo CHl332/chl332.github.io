@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>和善寺</title>
   
-  
+  <subtitle>学习</subtitle>
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-09-15T13:43:03.575Z</updated>
+  <updated>2022-09-18T08:24:16.570Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,11 +17,67 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>text</title>
+    <link href="http://example.com/2022/09/18/text/"/>
+    <id>http://example.com/2022/09/18/text/</id>
+    <published>2022-09-18T08:01:32.000Z</published>
+    <updated>2022-09-18T08:24:16.570Z</updated>
+    
+    <content type="html"><![CDATA[<p>这是测试的</p><p><img src="D:\Blog\source_posts\mywechat.jpg" alt="mywechat"></p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">width</span>=<span class="string">&quot;480&quot;</span> <span class="attr">height</span>=<span class="string">&quot;320&quot;</span> <span class="attr">controls</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">video_path</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br></pre></td></tr></table></figure><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% blockquote [善善332[, source]] [link] [source_link_title] %&#125;</span><br><span class="line">Quick Start</span><br><span class="line">&#123;% endblockquote %&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;这是测试的&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;D:\Blog\source_posts\mywechat.jpg&quot; alt=&quot;mywechat&quot;&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight html&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>draft1</title>
+    <link href="http://example.com/2022/09/18/draft1/"/>
+    <id>http://example.com/2022/09/18/draft1/</id>
+    <published>2022-09-18T07:34:27.000Z</published>
+    <updated>2022-09-18T07:48:00.154Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>text1</title>
+    <link href="http://example.com/2022/09/18/text1/"/>
+    <id>http://example.com/2022/09/18/text1/</id>
+    <published>2022-09-18T07:33:26.000Z</published>
+    <updated>2022-09-18T07:47:57.478Z</updated>
+    
+    <content type="html"><![CDATA[<p>​这是一个测试文件</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;​						这是一个测试文件&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>Hello World</title>
     <link href="http://example.com/2022/09/15/hello-world/"/>
     <id>http://example.com/2022/09/15/hello-world/</id>
     <published>2022-09-15T13:43:03.575Z</published>
-    <updated>2022-09-15T13:43:03.575Z</updated>
+    <updated>2022-09-18T07:48:03.232Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
     
