@@ -19,7 +19,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="运气和努力一样重要">
@@ -144,21 +144,6 @@
     <a href="/resources/" rel="section"><i class="download fa-fw"></i>resources</a>
 
   </li>
-        <li class="menu-item menu-item-schedule">
-
-    <a href="/schedule/" rel="section"><i class="calendar fa-fw"></i>日程表</a>
-
-  </li>
-        <li class="menu-item menu-item-sitemap">
-
-    <a href="/sitemap.xml" rel="section"><i class="sitemap fa-fw"></i>站点地图</a>
-
-  </li>
-        <li class="menu-item menu-item-commonweal">
-
-    <a href="/404/" rel="section"><i class="heartbeat fa-fw"></i>公益 404</a>
-
-  </li>
   </ul>
 </nav>
 
@@ -200,7 +185,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/09/18/text/" class="post-title-link" itemprop="url">text</a>
+            <a href="/2022/09/18/text/" class="post-title-link" itemprop="url">test</a>
         </h2>
 
         <div class="post-meta">
@@ -211,7 +196,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-09-18 16:01:32 / 修改时间：18:06:46" itemprop="dateCreated datePublished" datetime="2022-09-18T16:01:32+08:00">2022-09-18</time>
+              <time title="创建时间：2022-09-18 15:50:04 / 修改时间：20:40:45" itemprop="dateCreated datePublished" datetime="2022-09-18T15:50:04+08:00">2022-09-18</time>
             </span>
 
           
@@ -226,15 +211,13 @@
 
       
           <p>这是测试的</p>
-<p><img src="/2022/09/18/text/Blog\source_posts\text\mywechat.jpg" alt="mywechat"></p>
-<img src="/2022/09/18/text/09/18/text/mywechat.jpg" class title="This is an test image">
-
+<p><img src="/.com//.%5Ctext%5Cmywechat.jpg" alt="mywechat"></p>
 <h1 id="分布式问题"><a href="#分布式问题" class="headerlink" title="分布式问题"></a>分布式问题</h1><h2 id="Redis实现分布式锁"><a href="#Redis实现分布式锁" class="headerlink" title="Redis实现分布式锁"></a>Redis实现分布式锁</h2><p>Redis为单进程单线程模式，采用队列模式将并发访问变成串行访问，且多客户</p>
 <p>端对Redis的连接并不存在竞争关系Redis中可以使用SETNX命令实现分布式锁。</p>
 <p>当且仅当 key 不存在，将 key 的值设为 value。 若给定的 key 已经存在，则</p>
 <p>SETNX 不做任何动作</p>
 <p>SETNX 是『SET if Not eXists』(如果不存在，则 SET)的简写。</p>
-<p>返回值：设置成功，返回 1 。设置失败，返回 0 。<img src="/2022/09/18/text/桌面/12-Redis面试题（2020最新版）-重点.assets/img.jpg" alt="img"></p>
+<p>返回值：设置成功，返回 1 。设置失败，返回 0 。</p>
 <p>使用SETNX完成同步锁的流程及事项如下(img)：使用SETNX命令获取锁，若返回0（key已存在，锁已存在）则获取失败，反之获取成功为了防止获取锁后程序出现异常，导致其他线程&#x2F;进程调用SETNX命令总是返回</p>
 <p>0而进入死锁状态，需要为该key设置一个“合理”的过期时间释放锁，使用DEL命令将锁数据删除</p>
           <!--noindex-->
