@@ -196,7 +196,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-10-09 17:00:38 / 修改时间：17:04:51" itemprop="dateCreated datePublished" datetime="2022-10-09T17:00:38+08:00">2022-10-09</time>
+              <time title="创建时间：2022-10-09 17:00:38 / 修改时间：17:21:28" itemprop="dateCreated datePublished" datetime="2022-10-09T17:00:38+08:00">2022-10-09</time>
             </span>
 
           
@@ -212,27 +212,30 @@
       
           <p>Redis常用配置</p>
 <p>daemonize no</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">配置 redis server 是否以守护进程的方式启动。</span><br><span class="line"></span><br><span class="line">no：不以守护进程启动。</span><br><span class="line"></span><br><span class="line">yes：以守护进程启动。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">配置 redis server 是否以守护进程的方式启动。</span><br><span class="line">no：不以守护进程启动。</span><br><span class="line">yes：以守护进程启动。</span><br></pre></td></tr></table></figure>
 
 
 
 <p>pidfile “&#x2F;var&#x2F;run&#x2F;redis&#x2F;redis-server.pid”</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">当 Redis 以守护进程方式启动时，会在该文件里面写入 redis 的进程 id。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当 Redis 以守护进程方式启动时，会在该文件里面写入 redis 的进程 id。</span><br></pre></td></tr></table></figure>
 
 
 
 <p>port 6379</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">设置 redis server 启动的端口，默认为 6379。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">设置 redis server 启动的端口，默认为 6379。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
 
 <p>tcp-backlog 511</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TCP 监听的最大容纳数量。</span><br><span class="line">在高并发的环境下，需要把这个值调高以避免客户端连接缓慢的问题。</span><br><span class="line">如果该值大于 Linux 内核的值，则 Linux 内核会把这个值缩小成 /proc/sys/net/core/somaxconn 对应的值， 此时要同时修改这两个值才能生效。</span><br></pre></td></tr></table></figure>
-
-
-
-<p>bind 192.168.98.70</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/10/09/redis/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -473,7 +476,7 @@
 <!-- 自定义加上的 -->
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共5.4k字</span>
+  <span class="post-count">博客全站共6.1k字</span>
 </div>
 
 
