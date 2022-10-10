@@ -977,6 +977,7 @@ pre .javascript .function {
   line-height: 1.375em;
   padding: 0 40px;
   position: relative;
+  color: #ffb6c1 !important;
 }
 .brand:hover {
   color: var(--brand-hover-color);
@@ -1065,6 +1066,7 @@ pre .javascript .function {
   transition-delay: 0s;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
+  color: #ffb6c1 !important;
 }
 @media (hover: none) {
   .menu-item a:hover,
@@ -1166,7 +1168,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #5ef48a;
+  background: #ffff5e;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
