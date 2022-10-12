@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="基础知识为什么要用 Dubbo？随着服务化的进一步发展，服务越来越多，服务之间的调用和依赖关系也越来越 复杂，诞生了面向服务的架构体系(SOA)，也因此衍生出了一系列相应的技术，如对服务提供、服务调用、连接处理、通信协议、序列化方式、服务发现、服务 路由、日志输出等行为进行封装的服务框架。就这样为分布式系统的服务治理框 架就出现了，Dubbo 也就这样产生了。  Dubbo 是什么？Dubbo 是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo">
+<meta property="og:url" content="http://example.com/2022/10/12/14-Dubbo/index.html">
+<meta property="og:site_name" content="和善寺">
+<meta property="og:description" content="基础知识为什么要用 Dubbo？随着服务化的进一步发展，服务越来越多，服务之间的调用和依赖关系也越来越 复杂，诞生了面向服务的架构体系(SOA)，也因此衍生出了一系列相应的技术，如对服务提供、服务调用、连接处理、通信协议、序列化方式、服务发现、服务 路由、日志输出等行为进行封装的服务框架。就这样为分布式系统的服务治理框 架就出现了，Dubbo 也就这样产生了。  Dubbo 是什么？Dubbo 是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/Dubbo%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84%E5%88%86%E5%B1%82.png">
+<meta property="og:image" content="http://example.com/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/RPC.jpg">
+<meta property="og:image" content="http://example.com/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/RPC%E6%9E%B6%E6%9E%84%E7%BB%84%E4%BB%B6.jpg">
+<meta property="og:image" content="http://example.com/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/RPC%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86.jpg">
+<meta property="og:image" content="http://example.com/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/RPC%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86.jpg">
+<meta property="og:image" content="http://example.com/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/RPC.jpg">
+<meta property="article:published_time" content="2022-10-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-12T08:21:44.418Z">
+<meta property="article:author" content="善善332">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/Dubbo%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84%E5%88%86%E5%B1%82.png">
+
+<link rel="canonical" href="http://example.com/2022/10/12/14-Dubbo/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Dubbo | 和善寺</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="和善寺" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">和善寺</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">学习</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>resources</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/12/14-Dubbo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="善善332">
+      <meta itemprop="description" content="运气和努力一样重要">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="和善寺">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Dubbo
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-10-12 00:00:00 / 修改时间：16:21:44" itemprop="dateCreated datePublished" datetime="2022-10-12T00:00:00+08:00">2022-10-12</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><h2 id="为什么要用-Dubbo？"><a href="#为什么要用-Dubbo？" class="headerlink" title="为什么要用 Dubbo？"></a>为什么要用 Dubbo？</h2><p>随着服务化的进一步发展，服务越来越多，服务之间的调用和依赖关系也越来越 复杂，诞生了面向服务的架构体系(SOA)，也因此衍生出了一系列相应的技术，如对服务提供、服务调用、连接处理、通信协议、序列化方式、服务发现、服务 路由、日志输出等行为进行封装的服务框架。就这样为分布式系统的服务治理框 架就出现了，Dubbo 也就这样产生了。 </p>
+<h2 id="Dubbo-是什么？"><a href="#Dubbo-是什么？" class="headerlink" title="Dubbo 是什么？"></a>Dubbo 是什么？</h2><p>Dubbo 是一款高性能、轻量级的开源 RPC 框架，提供服务自动注册、自动发 现等高效服务治理方案， 可以和 Spring 框架无缝集成。 </p>
+<h2 id="Dubbo-的使用场景有哪些？"><a href="#Dubbo-的使用场景有哪些？" class="headerlink" title="Dubbo 的使用场景有哪些？"></a>Dubbo 的使用场景有哪些？</h2><ul>
+<li>透明化的远程方法调用：就像调用本地方法一样调用远程方法，只需简单配置， 没有任何API侵入。 </li>
+<li>软负载均衡及容错机制：可在内网替代 F5 等硬件负载均衡器，降低成本，减少 单点。 </li>
+<li>服务自动注册与发现：不再需要写死服务提供方地址，注册中心基于接口名查询 服务提供者的IP地址，并且能够平滑添加或删除服务提供者。</li>
+</ul>
+<h2 id="Dubbo-核心功能有哪些？"><a href="#Dubbo-核心功能有哪些？" class="headerlink" title="Dubbo 核心功能有哪些？"></a>Dubbo 核心功能有哪些？</h2><ul>
+<li>Remoting：网络通信框架，提供对多种NIO框架抽象封装，包括“同步转异 步”和“请求-响应”模式的信息交换方式。 </li>
+<li>Cluster：服务框架，提供基于接口方法的透明远程过程调用，包括多协议支 持，以及软负载均衡，失败容错，地址路由，动态配置等集群支持。 </li>
+<li>Registry：服务注册，基于注册中心目录服务，使服务消费方能动态的查找服务 提供方，使地址透明，使服务提供方可以平滑增加或减少机器。</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h1><h2 id="Dubbo-核心组件有哪些？"><a href="#Dubbo-核心组件有哪些？" class="headerlink" title="Dubbo 核心组件有哪些？"></a>Dubbo 核心组件有哪些？</h2><p>![Dubbo Architecture](14-Dubbo面试题（2020最新版）.assets&#x2F;Dubbo Architecture.png)</p>
+<ul>
+<li>Provider：暴露服务的服务提供方 </li>
+<li>Consumer：调用远程服务消费方 </li>
+<li>Registry：服务注册与发现注册中心 </li>
+<li>Monitor：监控中心和访问调用统计 </li>
+<li>Container：服务运行容器</li>
+</ul>
+<h2 id="Dubbo-服务器注册与发现的流程？"><a href="#Dubbo-服务器注册与发现的流程？" class="headerlink" title="Dubbo 服务器注册与发现的流程？"></a>Dubbo 服务器注册与发现的流程？</h2><p><strong>服务容器Container</strong>负责启动，加载，运行服务提供者。 </p>
+<p><strong>服务提供者Provider</strong>在启动时，向注册中心注册自己提供的服务。 </p>
+<p><strong>服务消费者Consumer</strong>在启动时，向注册中心订阅自己所需的服务。 </p>
+<p><strong>中心Registry</strong>返回服务提供者地址列表给消费者，如果有变更，注册中心 将基于长连接推送变更数据给消费者。 </p>
+<p><strong>服务消费者Consumer</strong>，从提供者地址列表中，基于软负载均衡算法，选一台 提供者进行调用，如果调用失败，再选另一台调用。 </p>
+<p><strong>服务消费者Consumer和提供者Provider</strong>，在内存中累计调用次数和调用时 间，定时每分钟发送一次统计数据到监控中心Monitor。</p>
+<h2 id="Dubbo-的整体架构设计有哪些分层"><a href="#Dubbo-的整体架构设计有哪些分层" class="headerlink" title="Dubbo 的整体架构设计有哪些分层?"></a>Dubbo 的整体架构设计有哪些分层?</h2><p><img src="/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/Dubbo%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84%E5%88%86%E5%B1%82.png" alt="Dubbo整体架构分层"></p>
+<p><strong>接口服务层（Service）：</strong>该层与业务逻辑相关，根据 provider 和 consumer  的业务设计对应的接口和实现 </p>
+<p><strong>配置层（Config）：</strong>对外配置接口，以 ServiceConfig 和 ReferenceConfig 为 中心 </p>
+<p><strong>服务代理层（Proxy）：</strong>服务接口透明代理，生成服务的客户端 Stub 和 服务端 的 Skeleton，以 ServiceProxy 为中心，扩展接口为 ProxyFactory </p>
+<p><strong>服务注册层（Registry）：</strong>封装服务地址的注册和发现，以服务 URL 为中心， 扩展接口为 RegistryFactory、Registry、RegistryService </p>
+<p><strong>路由层（Cluster）：</strong>封装多个提供者的路由和负载均衡，并桥接注册中心，以 Invoker 为中心，扩展接口为 Cluster、Directory、Router 和 LoadBlancce </p>
+<p><strong>监控层（Monitor）：</strong>RPC 调用次数和调用时间监控，以 Statistics 为中心， 扩展接口为 MonitorFactory、Monitor 和 MonitorService </p>
+<p><strong>远程调用层（Protocal）：</strong>封装 RPC 调用，以 Invocation 和 Result 为中心， 扩展接口为 Protocal、Invoker 和 Exporter</p>
+<p><strong>信息交换层（Exchange）：</strong>封装请求响应模式，同步转异步。以 Request 和 Response 为中心，扩展接口为 Exchanger、ExchangeChannel、 ExchangeClient 和 ExchangeServer </p>
+<p><strong>网络传输层（Transport）：</strong>抽象 mina 和 netty 为统一接口，以 Message  为中心，扩展接口为 Channel、Transporter、Client、Server 和 Codec </p>
+<p><strong>数据序列化层（Serialize）：</strong>可复用的一些工具，扩展接口为 Serialization、 ObjectInput、ObjectOutput 和 ThreadPool Dubbo </p>
+<h2 id="Monitor-实现原理？"><a href="#Monitor-实现原理？" class="headerlink" title="Monitor 实现原理？"></a>Monitor 实现原理？</h2><p>Consumer 端在发起调用之前会先走 filter 链；provider 端在接收到请求时也 是先走 filter 链，然后才进行真正的业务逻辑处理。默认情况下，在 consumer  和 provider 的 filter 链中都会有 Monitorfilter。 </p>
+<ol>
+<li>MonitorFilter 向 DubboMonitor 发送数据 </li>
+<li>DubboMonitor 将数据进行聚合后（默认聚合 1min 中的统计数据）暂存 到ConcurrentMap statisticsMap，然后使用一个含有 3 个线程（线程名字： DubboMonitorSendTimer）的线程池每隔 1min 钟，调用  SimpleMonitorService 遍历发送 statisticsMap 中的统计数据，每发送完毕一 个，就重置当前的 Statistics 的 AtomicReference </li>
+<li>SimpleMonitorService 将这些聚合数据塞入 BlockingQueue queue 中 （队列大写为 100000） </li>
+<li>SimpleMonitorService 使用一个后台线程（线程名为： DubboMonitorAsyncWriteLogThread）将 queue 中的数据写入文件（该线 程以死循环的形式来写） </li>
+<li>SimpleMonitorService 还会使用一个含有 1 个线程（线程名字： DubboMonitorTimer）的线程池每隔 5min 钟，将文件中的统计数据画成图表</li>
+</ol>
+<p>分布式框架</p>
+<h2 id="Dubbo-类似的分布式框架还有哪些？"><a href="#Dubbo-类似的分布式框架还有哪些？" class="headerlink" title="Dubbo 类似的分布式框架还有哪些？"></a>Dubbo 类似的分布式框架还有哪些？</h2><p>比较著名的就是 Spring Cloud。 </p>
+<h2 id="Dubbo-和-Spring-Cloud-有什么关系？"><a href="#Dubbo-和-Spring-Cloud-有什么关系？" class="headerlink" title="Dubbo 和 Spring Cloud 有什么关系？"></a>Dubbo 和 Spring Cloud 有什么关系？</h2><p>Dubbo 是 SOA 时代的产物，它的关注点主要在于服务的调用，流量分发、流 量监控和熔断。而 Spring Cloud 诞生于微服务架构时代，考虑的是微服务治理 的方方面面，另外由于依托了 Spring、Spring Boot 的优势之上，两个框架在 开始目标就不一致，Dubbo 定位服务治理、Spring Cloud 是打造一个生态。 </p>
+<h2 id="Dubbo-和-Spring-Cloud-有什么哪些区别？"><a href="#Dubbo-和-Spring-Cloud-有什么哪些区别？" class="headerlink" title="Dubbo 和 Spring Cloud 有什么哪些区别？"></a>Dubbo 和 Spring Cloud 有什么哪些区别？</h2><p>Dubbo 底层是使用 Netty 这样的 NIO 框架，是基于 TCP 协议传输的，配合以 </p>
+<p>Hession 序列化完成 RPC 通信。</p>
+<p>Spring Cloud 是基于 Http 协议 Rest 接口调用远程过程的通信，相对来说 </p>
+<p>Http 请求会有更大的报文，占的带宽也会更多。但是 REST 相比 RPC 更为灵</p>
+<p>活，服务提供方和调用方的依赖只依靠一纸契约，不存在代码级别的强依赖，这在强调快速演化的微服务环境下，显得更为合适，至于注重通信速度还是方便灵活性，具体情况具体考虑。</p>
+<h2 id="Dubbo-和-Dubbox-之间的区别？"><a href="#Dubbo-和-Dubbox-之间的区别？" class="headerlink" title="Dubbo 和 Dubbox 之间的区别？"></a>Dubbo 和 Dubbox 之间的区别？</h2><p>Dubbox 是继 Dubbo 停止维护后，当当网基于 Dubbo 做的一个扩展项目，如加了服务可 Restful 调用，更新了开源组件等。</p>
+<h1 id="注册中心"><a href="#注册中心" class="headerlink" title="注册中心"></a>注册中心</h1><h2 id="Dubbo-有哪些注册中心？"><a href="#Dubbo-有哪些注册中心？" class="headerlink" title="Dubbo 有哪些注册中心？"></a>Dubbo 有哪些注册中心？</h2><ul>
+<li>Multicast 注册中心：Multicast 注册中心不需要任何中心节点，只要广播地址，就能进行服务注册和发现,基于网络中组播传输实现。</li>
+<li>Zookeeper 注册中心：基于分布式协调系统 Zookeeper 实现，采用 Zookeeper 的 watch 机制实现数据变更。</li>
+<li>Redis 注册中心：基于 Redis 实现，采用 key&#x2F;map 存储，key 存储服务名和类型，map 中 key 存储服务 url，value 服务过期时间。基于 Redis 的发布&#x2F;订阅模式通知数据变更。</li>
+<li>Simple 注册中心。</li>
+</ul>
+<p>推荐使用 Zookeeper 作为注册中心</p>
+<h2 id="Dubbo-的注册中心集群挂掉，发布者和订阅者之间还能通信么？"><a href="#Dubbo-的注册中心集群挂掉，发布者和订阅者之间还能通信么？" class="headerlink" title="Dubbo 的注册中心集群挂掉，发布者和订阅者之间还能通信么？"></a>Dubbo 的注册中心集群挂掉，发布者和订阅者之间还能通信么？</h2><p>可以通讯。启动 Dubbo 时，消费者会从 Zookeeper 拉取注册的生产者的地址接口等数据，缓存在本地。每次调用时，按照本地存储的地址进行调用。</p>
+<h1 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h1><h2 id="Dubbo集群提供了哪些负载均衡策略？"><a href="#Dubbo集群提供了哪些负载均衡策略？" class="headerlink" title="Dubbo集群提供了哪些负载均衡策略？"></a>Dubbo集群提供了哪些负载均衡策略？</h2><ul>
+<li>Random LoadBalance: 随机选取提供者策略，有利于动态调整提供者权重。截面碰撞率高，调用次数越多，分布越均匀。</li>
+<li>RoundRobin LoadBalance: 轮循选取提供者策略，平均分布，但是存在请求累积的问题。</li>
+<li>LeastActive LoadBalance: 少活跃调用策略，解决慢提供者接收更少的请求。</li>
+<li>ConstantHash LoadBalance: 一致性 Hash 策略，使相同参数请求总是发到同一提供者，一台机器宕机，可以基于虚拟节点，分摊至其他提供者，避免引起提供者的剧烈变动。</li>
+</ul>
+<p>默认为 Random 随机调用。</p>
+<h2 id="Dubbo的集群容错方案有哪些？"><a href="#Dubbo的集群容错方案有哪些？" class="headerlink" title="Dubbo的集群容错方案有哪些？"></a>Dubbo的集群容错方案有哪些？</h2><ul>
+<li>Failover Cluster：失败自动切换，当出现失败，重试其它服务器。通常用于读操作，但重试会带来更长延迟。</li>
+<li>Failfast Cluster：快速失败，只发起一次调用，失败立即报错。通常用于非幂等性的写操作，比如新增记录。</li>
+<li>Failsafe Cluster：失败安全，出现异常时，直接忽略。通常用于写入审计日志等操作。</li>
+<li>Failback Cluster：失败自动恢复，后台记录失败请求，定时重发。通常用于消息通知操作。</li>
+<li>Forking Cluster：并行调用多个服务器，只要一个成功即返回。通常用于实时性要求较高的读操作，但需要浪费更多服务资源。可通过 forks&#x3D;”2″ 来设置 大并行数。</li>
+<li>Broadcast Cluster：广播调用所有提供者，逐个调用，任意一台报错则报错 。通常用于通知所有提供者更新缓存或日志等本地资源信息。</li>
+</ul>
+<p>默认的容错方案是 Failover Cluster。</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><h2 id="Dubbo-配置文件是如何加载到-Spring-中的？"><a href="#Dubbo-配置文件是如何加载到-Spring-中的？" class="headerlink" title="Dubbo 配置文件是如何加载到 Spring 中的？"></a>Dubbo 配置文件是如何加载到 Spring 中的？</h2><p>Spring 容器在启动的时候，会读取到 Spring 默认的一些 schema 以及 Dubbo 自定义的 schema，每个 schema 都会对应一个自己的 NamespaceHandler， NamespaceHandler 里面通过 BeanDefinitionParser 来解析配置信息并转化为需要加载的 bean 对象！</p>
+<h2 id="说说核心的配置有哪些？"><a href="#说说核心的配置有哪些？" class="headerlink" title="说说核心的配置有哪些？"></a>说说核心的配置有哪些？</h2><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>用途</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>服务配置</td>
+<td>用于暴露一个服务，定义服务的元信息，一个服务可以用多个协议暴露，一个服务也可以注册到多个注册中心</td>
+</tr>
+<tr>
+<td></td>
+<td>引用配置</td>
+<td>用于创建一个远程服务代理，一个引用可以指向多个注册中心</td>
+</tr>
+<tr>
+<td></td>
+<td>协议配置</td>
+<td>用于配置提供服务的协议信息，协议由提供方指定，消费方被动接受</td>
+</tr>
+<tr>
+<td></td>
+<td>应用配置</td>
+<td>用于配置当前应用信息，不管该应用是提供者还是消费者</td>
+</tr>
+<tr>
+<td></td>
+<td>模块配置</td>
+<td>用于配置当前模块信息，可选</td>
+</tr>
+<tr>
+<td></td>
+<td>模块配置</td>
+<td>用于配置当前模块信息，可选</td>
+</tr>
+<tr>
+<td></td>
+<td>注册中心配置</td>
+<td>用于配置连接注册中心相关信息</td>
+</tr>
+<tr>
+<td></td>
+<td>监控中心配置</td>
+<td>用于配置连接监控中心相关信息，可选</td>
+</tr>
+<tr>
+<td></td>
+<td>提供方配置</td>
+<td>当   ProtocolC onfig 和 ServiceCo nfig 某属  性没有配置时，采用此缺省值，可选</td>
+</tr>
+<tr>
+<td></td>
+<td>消费方配置</td>
+<td>当   Reference  Config 某属性没有配置时，采用此缺省值，可选</td>
+</tr>
+<tr>
+<td></td>
+<td>方法配置</td>
+<td>用于   ServiceCo nfig 和 Reference Config 指  定方法级的配置信息</td>
+</tr>
+<tr>
+<td></td>
+<td>参数配置</td>
+<td>用于指定方法参数配置</td>
+</tr>
+</tbody></table>
+<h2 id="Dubbo-超时设置有哪些方式？"><a href="#Dubbo-超时设置有哪些方式？" class="headerlink" title="Dubbo 超时设置有哪些方式？"></a>Dubbo 超时设置有哪些方式？</h2><p>Dubbo 超时设置有两种方式：</p>
+<ul>
+<li>服务提供者端设置超时时间，在Dubbo的用户文档中，推荐如果能在服务端多配置就尽量多配置，因为服务提供者比消费者更清楚自己提供的服务特性。</li>
+<li>服务消费者端设置超时时间，如果在消费者端设置了超时时间，以消费者端为主，即优先级更高。因为服务调用方设置超时时间控制性更灵活。如果消费方超时，服务端线程不会定制，会产生警告。</li>
+</ul>
+<h2 id="服务调用超时会怎么样？"><a href="#服务调用超时会怎么样？" class="headerlink" title="服务调用超时会怎么样？"></a>服务调用超时会怎么样？</h2><p>dubbo 在调用服务不成功时，默认是会重试两次。</p>
+<h1 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h1><h2 id="Dubbo-使用的是什么通信框架"><a href="#Dubbo-使用的是什么通信框架" class="headerlink" title="Dubbo 使用的是什么通信框架?"></a>Dubbo 使用的是什么通信框架?</h2><p>默认使用 Netty 作为通讯框架。</p>
+<h2 id="Dubbo-支持哪些协议，它们的优缺点有哪些？"><a href="#Dubbo-支持哪些协议，它们的优缺点有哪些？" class="headerlink" title="Dubbo 支持哪些协议，它们的优缺点有哪些？"></a>Dubbo 支持哪些协议，它们的优缺点有哪些？</h2><ul>
+<li>Dubbo： 单一长连接和 NIO 异步通讯，适合大并发小数据量的服务调用，以及消费者远大于提供者。传输协议 TCP，异步 Hessian 序列化。Dubbo推荐使用 dubbo协议。</li>
+<li>RMI： 采用 JDK 标准的 RMI 协议实现，传输参数和返回参数对象需要实现</li>
+<li>Serializable 接口，使用 Java 标准序列化机制，使用阻塞式短连接，传输数据包大小混合，消费者和提供者个数差不多，可传文件，传输协议 TCP。 多个短连接 TCP </li>
+<li>协议传输，同步传输，适用常规的远程服务调用和 RMI 互操作。在依赖低版本的 Common-Collections 包，Java 序列化存在安全漏洞。</li>
+<li>WebService：基于 WebService 的远程调用协议，集成 CXF 实现，提供和原生 WebService 的互操作。多个短连接，基于 HTTP 传输，同步传输，适用系统集成和跨语言调用。</li>
+<li>HTTP： 基于 Http 表单提交的远程调用协议，使用 Spring 的 HttpInvoke 实现。多个短连接，传输协议 HTTP，传入参数大小混合，提供者个数多于消费者，需要给应用程序和浏览器 JS 调用。</li>
+<li>Hessian：集成 Hessian 服务，基于 HTTP 通讯，采用 Servlet 暴露服务，Dubbo 内嵌 Jetty 作为服务器时默认实现，提供与 Hession 服务互操作。多个短连接，同步 HTTP 传输，Hessian 序列化，传入参数较大，提供者大于消费者，提供者压力较大，可传文件。</li>
+<li>Memcache：基于 Memcache实现的 RPC 协议。</li>
+</ul>
+<p>Redis：基于 Redis 实现的RPC协议。</p>
+<h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><h2 id="Dubbo-用到哪些设计模式？"><a href="#Dubbo-用到哪些设计模式？" class="headerlink" title="Dubbo 用到哪些设计模式？"></a>Dubbo 用到哪些设计模式？</h2><p>Dubbo 框架在初始化和通信过程中使用了多种设计模式，可灵活控制类加载、权限控制等功能。</p>
+<p>工厂模式</p>
+<p>Provider 在 export 服务时，会调用 ServiceConfig 的 export 方法。</p>
+<p>ServiceConfig中有个字段：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1	private static final Protocol protocol =</span><br><span class="line">2	ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtensi</span><br><span class="line">3	on();</span><br></pre></td></tr></table></figure>
+
+<p>Dubbo 里有很多这种代码。这也是一种工厂模式，只是实现类的获取采用了</p>
+<p>JDKSPI 的机制。这么实现的优点是可扩展性强，想要扩展实现，只需要在</p>
+<p>classpath下增加个文件就可以了，代码零侵入。另外，像上面的 Adaptive 实现，可以做到调用时动态决定调用哪个实现，但是由于这种实现采用了动态代理，会造成代码调试比较麻烦，需要分析出实际调用的实现类。</p>
+<p>装饰器模式</p>
+<p>Dubbo 在启动和调用阶段都大量使用了装饰器模式。以 Provider 提供的调用链为例，具体的调用链代码是在 ProtocolFilterWrapper 的 </p>
+<p>buildInvokerChain 完成的，具体是将注解中含有 group&#x3D;provider 的 Filter 实现，按照 order 排序，   后的调用顺序是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1 EchoFilter ‐&gt; ClassLoaderFilter ‐&gt; GenericFilter ‐&gt; ContextFilter ‐&gt;</span><br><span class="line">2 ExecuteLimitFilter ‐&gt; TraceFilter ‐&gt; TimeoutFilter ‐&gt; MonitorFilter ‐&gt;</span><br><span class="line">3 ExceptionFilter</span><br></pre></td></tr></table></figure>
+
+<p>更确切地说，这里是装饰器和责任链模式的混合使用。例如，EchoFilter 的作用是判断是否是回声测试请求，是的话直接返回内容，这是一种责任链的体现。而像ClassLoaderFilter 则只是在主功能上添加了功能，更改当前线程的 </p>
+<p>ClassLoader，这是典型的装饰器模式。</p>
+<p>观察者模式</p>
+<p>Dubbo 的 Provider 启动时，需要与注册中心交互，先注册自己的服务，再订阅自己的服务，订阅时，采用了观察者模式，开启一个 listener。注册中心会每 5 秒定时检查是否有服务更新，如果有更新，向该服务的提供者发送一个 notify 消息，provider 接受到 notify 消息后，运行 NotifyListener 的 notify 方法，执行监听器方法。</p>
+<p>动态代理模式</p>
+<p>Dubbo 扩展 JDK SPI 的类 ExtensionLoader 的 Adaptive 实现是典型的动态代理实现。Dubbo 需要灵活地控制实现类，即在调用阶段动态地根据参数决定调用哪个实现类，所以采用先生成代理类的方法，能够做到灵活的调用。生成代理类的代码是 ExtensionLoader 的 createAdaptiveExtensionClassCode 方法。代理类主要逻辑是，获取 URL 参数中指定参数的值作为获取实现类的key。</p>
+<h1 id="运维管理"><a href="#运维管理" class="headerlink" title="运维管理"></a>运维管理</h1><h2 id="服务上线怎么兼容旧版本？"><a href="#服务上线怎么兼容旧版本？" class="headerlink" title="服务上线怎么兼容旧版本？"></a>服务上线怎么兼容旧版本？</h2><p>可以用版本号（version）过渡，多个不同版本的服务注册到注册中心，版本号不同的服务相互间不引用。这个和服务分组的概念有一点类似。</p>
+<h2 id="Dubbo-telnet-命令能做什么？"><a href="#Dubbo-telnet-命令能做什么？" class="headerlink" title="Dubbo telnet 命令能做什么？"></a>Dubbo telnet 命令能做什么？</h2><p>dubbo 服务发布之后，我们可以利用 telnet 命令进行调试、管理。</p>
+<p>Dubbo2.0.5 以上版本服务提供端口支持 telnet 命令</p>
+<h2 id="Dubbo-支持服务降级吗？"><a href="#Dubbo-支持服务降级吗？" class="headerlink" title="Dubbo 支持服务降级吗？"></a>Dubbo 支持服务降级吗？</h2><p>以通过 dubbo:reference 中设置 mock&#x3D;“return null”。mock 的值也可以</p>
+<p>修改为 true，然后再跟接口同一个路径下实现一个 Mock 类，命名规则是 “接口名称+Mock” 后缀。然后在 Mock 类里实现自己的降级逻辑</p>
+<h2 id="Dubbo-如何优雅停机？"><a href="#Dubbo-如何优雅停机？" class="headerlink" title="Dubbo 如何优雅停机？"></a>Dubbo 如何优雅停机？</h2><p>Dubbo 是通过 JDK 的 ShutdownHook 来完成优雅停机的，所以如果使用kill </p>
+<p>-9 PID 等强制关闭指令，是不会执行优雅停机的，只有通过 kill PID 时，才会执行。</p>
+<h1 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h1><h2 id="Dubbo-SPI-和-Java-SPI-区别？"><a href="#Dubbo-SPI-和-Java-SPI-区别？" class="headerlink" title="Dubbo SPI 和 Java SPI 区别？"></a>Dubbo SPI 和 Java SPI 区别？</h2><p>JDK SPI：</p>
+<p>JDK 标准的 SPI 会一次性加载所有的扩展实现，如果有的扩展很耗时，但也没用上，很浪费资源。所以只希望加载某个的实现，就不现实了</p>
+<p>DUBBO SPI：</p>
+<p>1、     对 Dubbo 进行扩展，不需要改动 Dubbo 的源码</p>
+<p>2、     延迟加载，可以一次只加载自己想要加载的扩展实现。</p>
+<p>3、     增加了对扩展点 IOC 和 AOP 的支持，一个扩展点可以直接 setter 注入其它扩展点。</p>
+<p>4、     Dubbo 的扩展机制能很好的支持第三方 IoC 容器，默认支持 Spring </p>
+<p>Bean。其他</p>
+<h2 id="Dubbo-支持分布式事务吗？"><a href="#Dubbo-支持分布式事务吗？" class="headerlink" title="Dubbo 支持分布式事务吗？"></a>Dubbo 支持分布式事务吗？</h2><p>目前暂时不支持，可与通过 tcc-transaction 框架实现介绍：tcc-transaction 是开源的 TCC 补偿性分布式事务框架</p>
+<p>TCC-Transaction 通过 Dubbo 隐式传参的功能，避免自己对业务代码的入侵。</p>
+<h2 id="Dubbo-可以对结果进行缓存吗？"><a href="#Dubbo-可以对结果进行缓存吗？" class="headerlink" title="Dubbo 可以对结果进行缓存吗？"></a>Dubbo 可以对结果进行缓存吗？</h2><p>为了提高数据访问的速度。Dubbo 提供了声明式缓存，以减少用户加缓存的工作量</p>
+<p>其实比普通的配置文件就多了一个标签 cache&#x3D;“true”</p>
+<p>Dubbo 必须依赖的包有哪些？</p>
+<p>Dubbo 必须依赖 JDK，其他为可选。</p>
+<p>Dubbo 支持哪些序列化方式？</p>
+<p>默认使用 Hessian 序列化，还有 Duddo、FastJson、Java 自带序列化。</p>
+<h2 id="Dubbo-在安全方面有哪些措施？"><a href="#Dubbo-在安全方面有哪些措施？" class="headerlink" title="Dubbo 在安全方面有哪些措施？"></a>Dubbo 在安全方面有哪些措施？</h2><ul>
+<li>Dubbo 通过 Token 令牌防止用户绕过注册中心直连，然后在注册中心上管理授权。</li>
+<li>Dubbo 还提供服务黑白名单，来控制服务所允许的调用方。</li>
+</ul>
+<h2 id="服务调用是阻塞的吗？"><a href="#服务调用是阻塞的吗？" class="headerlink" title="服务调用是阻塞的吗？"></a>服务调用是阻塞的吗？</h2><p>默认是阻塞的，可以异步调用，没有返回值的可以这么做。Dubbo 是基于 NIO 的非阻塞实现并行调用，客户端不需要启动多线程即可完成并行调用多个远程服务，相对多线程开销较小，异步调用会返回一个 Future 对象。</p>
+<h2 id="服务提供者能实现失效踢出是什么原理？"><a href="#服务提供者能实现失效踢出是什么原理？" class="headerlink" title="服务提供者能实现失效踢出是什么原理？"></a>服务提供者能实现失效踢出是什么原理？</h2><p>服务失效踢出基于 zookeeper 的临时节点原理。</p>
+<h2 id="同一个服务多个注册的情况下可以直-连某一个服务吗？"><a href="#同一个服务多个注册的情况下可以直-连某一个服务吗？" class="headerlink" title="同一个服务多个注册的情况下可以直()连某一个服务吗？"></a>同一个服务多个注册的情况下可以直()连某一个服务吗？</h2><p>可以点对点直连，修改配置即可，也可以通过 telnet 直接某个服务。</p>
+<h2 id="Dubbo-服务降级，失败重试怎么做？"><a href="#Dubbo-服务降级，失败重试怎么做？" class="headerlink" title="Dubbo 服务降级，失败重试怎么做？"></a>Dubbo 服务降级，失败重试怎么做？</h2><p>可以通过 dubbo:reference 中设置 mock&#x3D;“return null”。mock 的值也可以修改为 true，然后再跟接口同一个路径下实现一个 Mock 类，命名规则是 </p>
+<p>“接口名称+Mock” 后缀。然后在 Mock 类里实现自己的降级逻辑</p>
+<h2 id="Dubbo-使用过程中都遇到了些什么问题？"><a href="#Dubbo-使用过程中都遇到了些什么问题？" class="headerlink" title="Dubbo 使用过程中都遇到了些什么问题？"></a>Dubbo 使用过程中都遇到了些什么问题？</h2><p>在注册中心找不到对应的服务,检查 service 实现类是否添加了@service 注解无法连接到注册中心,检查配置文件中的对应的测试 ip 是否正确</p>
+<h1 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h1><h2 id="为什么要有RPC"><a href="#为什么要有RPC" class="headerlink" title="为什么要有RPC"></a>为什么要有RPC</h2><p>http接口是在接口不多、系统与系统交互较少的情况下，解决信息孤岛初期常使用的一种通信手段；优点就是简单、直接、开发方便。利用现成的http协议进行传输。但是如果是一个大型的网站，内部子系统较多、接口非常多的情况下，</p>
+<p>RPC框架的好处就显示出来了，首先就是长链接，不必每次通信都要像http一样去3次握手什么的，减少了网络开销；其次就是RPC框架一般都有注册中心，有丰富的监控管理；发布、下线接口、动态扩展等，对调用方来说是无感知、统一化的操作。第三个来说就是安全性。  后就是   近流行的服务化架构、服务化治理，RPC框架是一个强力的支撑。</p>
+<p>socket只是一个简单的网络通信方式，只是创建通信双方的通信通道，而要实现rpc的功能，还需要对其进行封装，以实现更多的功能。</p>
+<p>RPC一般配合netty框架、spring自定义注解来编写轻量级框架，其实netty内部是封装了socket的，较新的jdk的IO一般是NIO，即非阻塞IO，在高并发网站中，RPC的优势会很明显</p>
+<h2 id="什么是RPC"><a href="#什么是RPC" class="headerlink" title="什么是RPC"></a>什么是RPC</h2><p>RPC（Remote Procedure Call Protocol）远程过程调用协议，它是一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的协议。简言之，RPC使得程序能够像访问本地系统资源一样，去访问远端系统资源。比较关键的一些方面包括：通讯协议、序列化、资源（接口）描述、服务框架、性能、语言支持等。</p>
+<p><img src="/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/RPC.jpg" alt="RPC"></p>
+<p>简单的说，RPC就是从一台机器(客户端)上通过参数传递的方式调用另一台机器</p>
+<p>(服务器)上的一个函数或方法(可以统称为服务)并得到返回的结果。</p>
+<h2 id="PRC架构组件"><a href="#PRC架构组件" class="headerlink" title="PRC架构组件"></a>PRC架构组件</h2><p>一个基本的RPC架构里面应该至少包含以下4个组件：</p>
+<p>1、     客户端（Client）:服务调用方（服务消费者）</p>
+<p>2、     客户端存根（Client Stub）:存放服务端地址信息，将客户端的请求参数数据信息打包成网络消息，再通过网络传输发送给服务端</p>
+<p>3、     服务端存根（Server Stub）:接收客户端发送过来的请求消息并进行解包，然后再调用本地服务进行处理</p>
+<p>4、     服务端（Server）:服务的真正提供者</p>
+<p><img src="/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/RPC%E6%9E%B6%E6%9E%84%E7%BB%84%E4%BB%B6.jpg" alt="RPC架构组件"></p>
+<p>具体调用过程：</p>
+<p>1、     服务消费者（client客户端）通过调用本地服务的方式调用需要消费的服务；</p>
+<p>2、     客户端存根（client stub）接收到调用请求后负责将方法、入参等信息序列化（组装）成能够进行网络传输的消息体；</p>
+<p>3、     客户端存根（client stub）找到远程的服务地址，并且将消息通过网络发送给服务端；</p>
+<p>4、     服务端存根（server stub）收到消息后进行解码（反序列化操作）；</p>
+<p>5、     服务端存根（server stub）根据解码结果调用本地的服务进行相关处理；</p>
+<p>6、     本地服务执行具体业务逻辑并将处理结果返回给服务端存根（server stub）；</p>
+<p>7、     服务端存根（server stub）将返回结果重新打包成消息（序列化）并通过网络发送至消费方；</p>
+<p>8、     客户端存根（client stub）接收到消息，并进行解码（反序列化）；</p>
+<p>9、     服务消费方得到 终结果；而RPC框架的实现目标则是将上面的第2-10步完好地封装起来，也就是把调用、编码&#x2F;解码的过程给封装起来，让用户感觉上像调用本地服务一样的调用远程服务。</p>
+<h2 id="RPC和SOA、SOAP、REST的区别"><a href="#RPC和SOA、SOAP、REST的区别" class="headerlink" title="RPC和SOA、SOAP、REST的区别"></a>RPC和SOA、SOAP、REST的区别</h2><p>1、REST</p>
+<p>可以看着是HTTP协议的一种直接应用，默认基于JSON作为传输格式,使用简单, 学习成本低效率高,但是安全性较低。</p>
+<p>2、SOAP</p>
+<p>SOAP是一种数据交换协议规范,是一种轻量的、简单的、基于XML的协议的规范。而SOAP可以看着是一个重量级的协议，基于XML、SOAP在安全方面是通过使用XML-Security和XML-Signature两个规范组成了WS-Security来实现安全控制的,当前已经得到了各个厂商的支持 。</p>
+<p>它有什么优点？简单总结为：易用、灵活、跨语言、跨平台。</p>
+<p>3、SOA</p>
+<p>面向服务架构，它可以根据需求通过网络对松散耦合的粗粒度应用组件进行分布式部署、组合和使用。服务层是SOA的基础，可以直接被应用调用，从而有效控制系统中与软件代理交互的人为依赖性。</p>
+<p>SOA是一种粗粒度、松耦合服务架构，服务之间通过简单、精确定义接口进行通讯，不涉及底层编程接口和通讯模型。SOA可以看作是B&#x2F;S模型、XML（标准通用标记语言的子集）&#x2F;Web Service技术之后的自然延伸。</p>
+<p>4、REST 和 SOAP、RPC 有何区别呢?</p>
+<p>没什么太大区别，他们的本质都是提供可支持分布式的基础服务， 大的区别在于他们各自的的特点所带来的不同应用场景 。</p>
+<h2 id="RPC框架需要解决的问题？"><a href="#RPC框架需要解决的问题？" class="headerlink" title="RPC框架需要解决的问题？"></a>RPC框架需要解决的问题？</h2><p>1、     如何确定客户端和服务端之间的通信协议？</p>
+<p>2、     如何更高效地进行网络通信？</p>
+<p>3、     服务端提供的服务如何暴露给客户端？</p>
+<p>4、     客户端如何发现这些暴露的服务？</p>
+<p>5、     如何更高效地对请求对象和响应结果进行序列化和反序列化操作？</p>
+<h2 id="RPC的实现基础？"><a href="#RPC的实现基础？" class="headerlink" title="RPC的实现基础？"></a>RPC的实现基础？</h2><p>1、     需要有非常高效的网络通信，比如一般选择Netty作为网络通信框架；</p>
+<p>2、     需要有比较高效的序列化框架，比如谷歌的Protobuf序列化框架；</p>
+<p>3、     可靠的寻址方式（主要是提供服务的发现），比如可以使用Zookeeper来注册服务等等；</p>
+<p>4、     如果是带会话（状态）的RPC调用，还需要有会话和状态保持的功能；</p>
+<h2 id="RPC使用了哪些关键技术？"><a href="#RPC使用了哪些关键技术？" class="headerlink" title="RPC使用了哪些关键技术？"></a>RPC使用了哪些关键技术？</h2><p>1、动态代理</p>
+<p>生成Client Stub（客户端存根）和Server Stub（服务端存根）的时候需要用到 Java动态代理技术，可以使用JDK提供的原生的动态代理机制，也可以使用开源的：CGLib代理，Javassist字节码生成技术。</p>
+<p>2、序列化和反序列化在网络中，所有的数据都将会被转化为字节进行传送，所以为了能够使参数对象在网络中进行传输，需要对这些参数进行序列化和反序列化操作。</p>
+<ul>
+<li>序列化：把对象转换为字节序列的过程称为对象的序列化，也就是编码的过程。</li>
+<li>反序列化：把字节序列恢复为对象的过程称为对象的反序列化，也就是解码的过程。</li>
+</ul>
+<p>目前比较高效的开源序列化框架：如Kryo、FastJson和Protobuf等。</p>
+<p>1、NIO通信</p>
+<p>出于并发性能的考虑，传统的阻塞式 IO 显然不太合适，因此我们需要异步的 </p>
+<p>IO，即 NIO。Java 提供了 NIO 的解决方案，Java 7 也提供了更优秀的 NIO.2 支持。可以选择Netty或者MINA来解决NIO数据传输的问题。</p>
+<p>2、服务注册中心</p>
+<p>可选：Redis、Zookeeper、Consul 、Etcd。一般使用ZooKeeper提供服务注册与发现功能，解决单点故障以及分布式部署的问题(注册中心)。</p>
+<h2 id="主流RPC框架有哪些"><a href="#主流RPC框架有哪些" class="headerlink" title="主流RPC框架有哪些"></a>主流RPC框架有哪些</h2><p>1、RMI</p>
+<p>利用java.rmi包实现，基于Java远程方法协议(Java Remote Method Protocol) 和java的原生序列化。</p>
+<p>2、Hessian</p>
+<p>是一个轻量级的remoting onhttp工具，使用简单的方法提供了RMI的功能。 基于HTTP协议，采用二进制编解码。</p>
+<p>3、protobuf-rpc-pro是一个Java类库，提供了基于 Google 的 Protocol Buffers 协议的远程方法调用的框架。基于 Netty 底层的 NIO 技术。支持 TCP 重用&#x2F; keep-alive、SSL加密、RPC 调用取消操作、嵌入式日志等功能。</p>
+<p>4、Thrift</p>
+<p>是一种可伸缩的跨语言服务的软件框架。它拥有功能强大的代码生成引擎，无缝地支持C + +，C#，Java，Python和PHP和Ruby。thrift允许你定义一个描述</p>
+<p>文件，描述数据类型和服务接口。依据该文件，编译器方便地生成RPC客户端和服务器通信代码。</p>
+<p>初由facebook开发用做系统内个语言之间的RPC通信，2007年由facebook 贡献到apache基金 ，现在是apache下的opensource之一 。支持多种语言之间的RPC方式的通信：php语言client可以构造一个对象，调用相应的服务方法</p>
+<p>来调用java语言的服务，跨越语言的C&#x2F;S RPC调用。底层通讯基于SOCKET。</p>
+<p>5、Avro</p>
+<p>出自Hadoop之父Doug Cutting, 在Thrift已经相当流行的情况下推出Avro的目标不仅是提供一套类似Thrift的通讯中间件,更是要建立一个新的，标准性的云计算的数据交换和存储的Protocol。支持HTTP，TCP两种协议。</p>
+<p>6、Dubbo</p>
+<p>Dubbo是 阿里巴巴公司开源的一个高性能优秀的服务框架，使得应用可通过高</p>
+<p>性能的 RPC 实现服务的输出和输入功能，可以和 Spring框架无缝集成。</p>
+<h2 id="RPC的实现原理架构图"><a href="#RPC的实现原理架构图" class="headerlink" title="RPC的实现原理架构图"></a>RPC的实现原理架构图</h2><p><img src="/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/RPC%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86.jpg" alt="RPC的实现原理"></p>
+<p><img src="/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/RPC%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86.jpg" alt="RPC的基本原理"></p>
+<p>PS：这张图非常重点，是PRC的基本原理，请大家一定记住！也就是说两台服务器A，B，一个应用部署在A服务器上，想要调用B服务器上应用提供的函数&#x2F;方法，由于不在一个内存空间，不能直接调用，需要通过网络来表达调用的语义和传达调用的数据。</p>
+<p>比如说，A服务器想调用B服务器上的一个方法：</p>
+<p>User getUserByName(String userName)</p>
+<p>1、建立通信首先要解决通讯的问题：即A机器想要调用B机器，首先得建立起通信连接。</p>
+<p>主要是通过在客户端和服务器之间建立TCP连接，远程过程调用的所有交换的数据都在这个连接里传输。连接可以是按需连接，调用结束后就断掉，也可以是长连接，多个远程过程调用共享同一个连接。</p>
+<p>通常这个连接可以是按需连接（需要调用的时候就先建立连接，调用结束后就立马断掉），也可以是长连接（客户端和服务器建立起连接之后保持长期持有，不管此时有无数据包的发送，可以配合心跳检测机制定期检测建立的连接是否存活有效），多个远程过程调用共享同一个连接。</p>
+<p>2、服务寻址要解决寻址的问题，也就是说，A服务器上的应用怎么告诉底层的RPC框架，如何连接到B服务器（如主机或IP地址）以及特定的端口，方法的名称名称是什么。</p>
+<p>通常情况下我们需要提供B机器（主机名或IP地址）以及特定的端口，然后指定调用的方法或者函数的名称以及入参出参等信息，这样才能完成服务的一个调用。</p>
+<p>可靠的寻址方式（主要是提供服务的发现）是RPC的实现基石，比如可以采用</p>
+<p>Redis或者Zookeeper来注册服务等等。</p>
+<p><img src="/14-Dubbo%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89.assets/RPC.jpg" alt="RPC"></p>
+<p>2.1、   从服务提供者的角度看：当服务提供者启动的时候，需要将自己提供的服务注册到指定的注册中心，以便服务消费者能够通过服务注册中心进行查找；当服务提供者由于各种原因致使提供的服务停止时，需要向注册中心注销停止的服务；服务的提供者需要定期向服务注册中心发送心跳检测，服务注册中心如果一段时间未收到来自服务提供者的心跳后，认为该服务提供者已经停止服务，则将该服务从注册中心上去掉。</p>
+<p>2.2、   从调用者的角度看：服务的调用者启动的时候根据自己订阅的服务向服务注册中心查找服务提供者的地址等信息；当服务调用者消费的服务上线或者下线的时候，注册中心会告知该服务的调用者；服务调用者下线的时候，则取消订阅。</p>
+<p>3、网络传输3.1、序列化</p>
+<p>当A机器上的应用发起一个RPC调用时，调用方法和其入参等信息需要通过底层的网络协议如TCP传输到B机器，由于网络协议是基于二进制的，所有我们传输的参数数据都需要先进行序列化（Serialize）或者编组（marshal）成二进制的形式才能在网络中进行传输。然后通过寻址操作和网络传输将序列化或者编组之后的二进制数据发送给B机器。</p>
+<p>3.2、反序列化</p>
+<p>当B机器接收到A机器的应用发来的请求之后，又需要对接收到的参数等信息进行反序列化操作（序列化的逆操作），即将二进制信息恢复为内存中的表达方</p>
+<p>式，然后再找到对应的方法（寻址的一部分）进行本地调用（一般是通过生成代理Proxy去调用,</p>
+<p>通常会有JDK动态代理、CGLIB动态代理、Javassist生成字节码技术等），之后得到调用的返回值。</p>
+<p>4、服务调用</p>
+<p>B机器进行本地调用（通过代理Proxy和反射调用）之后得到了返回值，此时还需要再把返回值发送回A机器，同样也需要经过序列化操作，然后再经过网络传输将二进制数据发送回A机器，而当A机器接收到这些返回值之后，则再次进行反序列化操作，恢复为内存中的表达方式，  后再交给A机器上的应用进行相关处理（一般是业务逻辑处理操作）。通常，经过以上四个步骤之后，一次完整的RPC调用算是完成了，另外可能因为网络抖动等原因需要重试等。</p>
+
+    </div>
+
+    
+    
+    
+
+       
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>善善332
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2022/10/12/14-Dubbo/" title="Dubbo">http://example.com/2022/10/12/14-Dubbo/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/12/19-%E5%88%86%E5%B8%83%E5%BC%8F/" rel="prev" title="分布式">
+      <i class="fa fa-chevron-left"></i> 分布式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/10/12/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E9%87%8D%E7%82%B9/" rel="next" title="数据结构与算法">
+      数据结构与算法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81NzI3Ny8zMzc0MQ=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8-Dubbo%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要用 Dubbo？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">Dubbo 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">Dubbo 的使用场景有哪些？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">1.4.</span> <span class="nav-text">Dubbo 核心功能有哪些？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.</span> <span class="nav-text">架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">Dubbo 核心组件有哪些？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B3%A8%E5%86%8C%E4%B8%8E%E5%8F%91%E7%8E%B0%E7%9A%84%E6%B5%81%E7%A8%8B%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">Dubbo 服务器注册与发现的流程？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E7%9A%84%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%9C%89%E5%93%AA%E4%BA%9B%E5%88%86%E5%B1%82"><span class="nav-number">2.3.</span> <span class="nav-text">Dubbo 的整体架构设计有哪些分层?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Monitor-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">Monitor 实现原理？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E7%B1%BB%E4%BC%BC%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E6%A1%86%E6%9E%B6%E8%BF%98%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">Dubbo 类似的分布式框架还有哪些？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E5%92%8C-Spring-Cloud-%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F"><span class="nav-number">2.6.</span> <span class="nav-text">Dubbo 和 Spring Cloud 有什么关系？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E5%92%8C-Spring-Cloud-%E6%9C%89%E4%BB%80%E4%B9%88%E5%93%AA%E4%BA%9B%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">2.7.</span> <span class="nav-text">Dubbo 和 Spring Cloud 有什么哪些区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E5%92%8C-Dubbox-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">2.8.</span> <span class="nav-text">Dubbo 和 Dubbox 之间的区别？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-number">3.</span> <span class="nav-text">注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E6%9C%89%E5%93%AA%E4%BA%9B%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">Dubbo 有哪些注册中心？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E7%9A%84%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E9%9B%86%E7%BE%A4%E6%8C%82%E6%8E%89%EF%BC%8C%E5%8F%91%E5%B8%83%E8%80%85%E5%92%8C%E8%AE%A2%E9%98%85%E8%80%85%E4%B9%8B%E9%97%B4%E8%BF%98%E8%83%BD%E9%80%9A%E4%BF%A1%E4%B9%88%EF%BC%9F"><span class="nav-number">3.2.</span> <span class="nav-text">Dubbo 的注册中心集群挂掉，发布者和订阅者之间还能通信么？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4"><span class="nav-number">4.</span> <span class="nav-text">集群</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo%E9%9B%86%E7%BE%A4%E6%8F%90%E4%BE%9B%E4%BA%86%E5%93%AA%E4%BA%9B%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5%EF%BC%9F"><span class="nav-number">4.1.</span> <span class="nav-text">Dubbo集群提供了哪些负载均衡策略？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo%E7%9A%84%E9%9B%86%E7%BE%A4%E5%AE%B9%E9%94%99%E6%96%B9%E6%A1%88%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">4.2.</span> <span class="nav-text">Dubbo的集群容错方案有哪些？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">5.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%98%AF%E5%A6%82%E4%BD%95%E5%8A%A0%E8%BD%BD%E5%88%B0-Spring-%E4%B8%AD%E7%9A%84%EF%BC%9F"><span class="nav-number">5.1.</span> <span class="nav-text">Dubbo 配置文件是如何加载到 Spring 中的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E6%A0%B8%E5%BF%83%E7%9A%84%E9%85%8D%E7%BD%AE%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">5.2.</span> <span class="nav-text">说说核心的配置有哪些？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E8%B6%85%E6%97%B6%E8%AE%BE%E7%BD%AE%E6%9C%89%E5%93%AA%E4%BA%9B%E6%96%B9%E5%BC%8F%EF%BC%9F"><span class="nav-number">5.3.</span> <span class="nav-text">Dubbo 超时设置有哪些方式？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E8%B6%85%E6%97%B6%E4%BC%9A%E6%80%8E%E4%B9%88%E6%A0%B7%EF%BC%9F"><span class="nav-number">5.4.</span> <span class="nav-text">服务调用超时会怎么样？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="nav-number">6.</span> <span class="nav-text">通信协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E4%BD%BF%E7%94%A8%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6"><span class="nav-number">6.1.</span> <span class="nav-text">Dubbo 使用的是什么通信框架?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E6%94%AF%E6%8C%81%E5%93%AA%E4%BA%9B%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%AE%83%E4%BB%AC%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">6.2.</span> <span class="nav-text">Dubbo 支持哪些协议，它们的优缺点有哪些？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">7.</span> <span class="nav-text">设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E7%94%A8%E5%88%B0%E5%93%AA%E4%BA%9B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%9F"><span class="nav-number">7.1.</span> <span class="nav-text">Dubbo 用到哪些设计模式？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86"><span class="nav-number">8.</span> <span class="nav-text">运维管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E4%B8%8A%E7%BA%BF%E6%80%8E%E4%B9%88%E5%85%BC%E5%AE%B9%E6%97%A7%E7%89%88%E6%9C%AC%EF%BC%9F"><span class="nav-number">8.1.</span> <span class="nav-text">服务上线怎么兼容旧版本？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-telnet-%E5%91%BD%E4%BB%A4%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">8.2.</span> <span class="nav-text">Dubbo telnet 命令能做什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E6%94%AF%E6%8C%81%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7%E5%90%97%EF%BC%9F"><span class="nav-number">8.3.</span> <span class="nav-text">Dubbo 支持服务降级吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%81%9C%E6%9C%BA%EF%BC%9F"><span class="nav-number">8.4.</span> <span class="nav-text">Dubbo 如何优雅停机？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SPI"><span class="nav-number">9.</span> <span class="nav-text">SPI</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-SPI-%E5%92%8C-Java-SPI-%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">9.1.</span> <span class="nav-text">Dubbo SPI 和 Java SPI 区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E6%94%AF%E6%8C%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%90%97%EF%BC%9F"><span class="nav-number">9.2.</span> <span class="nav-text">Dubbo 支持分布式事务吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E5%8F%AF%E4%BB%A5%E5%AF%B9%E7%BB%93%E6%9E%9C%E8%BF%9B%E8%A1%8C%E7%BC%93%E5%AD%98%E5%90%97%EF%BC%9F"><span class="nav-number">9.3.</span> <span class="nav-text">Dubbo 可以对结果进行缓存吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E5%9C%A8%E5%AE%89%E5%85%A8%E6%96%B9%E9%9D%A2%E6%9C%89%E5%93%AA%E4%BA%9B%E6%8E%AA%E6%96%BD%EF%BC%9F"><span class="nav-number">9.4.</span> <span class="nav-text">Dubbo 在安全方面有哪些措施？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E6%98%AF%E9%98%BB%E5%A1%9E%E7%9A%84%E5%90%97%EF%BC%9F"><span class="nav-number">9.5.</span> <span class="nav-text">服务调用是阻塞的吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85%E8%83%BD%E5%AE%9E%E7%8E%B0%E5%A4%B1%E6%95%88%E8%B8%A2%E5%87%BA%E6%98%AF%E4%BB%80%E4%B9%88%E5%8E%9F%E7%90%86%EF%BC%9F"><span class="nav-number">9.6.</span> <span class="nav-text">服务提供者能实现失效踢出是什么原理？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E4%B8%80%E4%B8%AA%E6%9C%8D%E5%8A%A1%E5%A4%9A%E4%B8%AA%E6%B3%A8%E5%86%8C%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%8F%AF%E4%BB%A5%E7%9B%B4-%E8%BF%9E%E6%9F%90%E4%B8%80%E4%B8%AA%E6%9C%8D%E5%8A%A1%E5%90%97%EF%BC%9F"><span class="nav-number">9.7.</span> <span class="nav-text">同一个服务多个注册的情况下可以直()连某一个服务吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7%EF%BC%8C%E5%A4%B1%E8%B4%A5%E9%87%8D%E8%AF%95%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F"><span class="nav-number">9.8.</span> <span class="nav-text">Dubbo 服务降级，失败重试怎么做？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo-%E4%BD%BF%E7%94%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%83%BD%E9%81%87%E5%88%B0%E4%BA%86%E4%BA%9B%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">9.9.</span> <span class="nav-text">Dubbo 使用过程中都遇到了些什么问题？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RPC"><span class="nav-number">10.</span> <span class="nav-text">RPC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89RPC"><span class="nav-number">10.1.</span> <span class="nav-text">为什么要有RPC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFRPC"><span class="nav-number">10.2.</span> <span class="nav-text">什么是RPC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PRC%E6%9E%B6%E6%9E%84%E7%BB%84%E4%BB%B6"><span class="nav-number">10.3.</span> <span class="nav-text">PRC架构组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC%E5%92%8CSOA%E3%80%81SOAP%E3%80%81REST%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">10.4.</span> <span class="nav-text">RPC和SOA、SOAP、REST的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC%E6%A1%86%E6%9E%B6%E9%9C%80%E8%A6%81%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">10.5.</span> <span class="nav-text">RPC框架需要解决的问题？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%9F%BA%E7%A1%80%EF%BC%9F"><span class="nav-number">10.6.</span> <span class="nav-text">RPC的实现基础？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC%E4%BD%BF%E7%94%A8%E4%BA%86%E5%93%AA%E4%BA%9B%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%EF%BC%9F"><span class="nav-number">10.7.</span> <span class="nav-text">RPC使用了哪些关键技术？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E6%B5%81RPC%E6%A1%86%E6%9E%B6%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="nav-number">10.8.</span> <span class="nav-text">主流RPC框架有哪些</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-number">10.9.</span> <span class="nav-text">RPC的实现原理架构图</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="善善332"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">善善332</p>
+  <div class="site-description" itemprop="description">运气和努力一样重要</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CHl332" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CHl332" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2541621686@qq.com" title="E-Mail → mailto:2541621686@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/mywechat.jpg" title="Wechar → &#x2F;images&#x2F;mywechat.jpg"><i class="fa-weixin fa-fw"></i>Wechar</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.instagram.com/shanshan3.32/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;shanshan3.32&#x2F;" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/docs/share/4fda01be-199a-4d34-aa02-eb4960d4fa2b#%20%E3%80%8ASpringCloud%E3%80%8B" title="YuQue → https:&#x2F;&#x2F;www.yuque.com&#x2F;docs&#x2F;share&#x2F;4fda01be-199a-4d34-aa02-eb4960d4fa2b?# 《SpringCloud》" rel="noopener" target="_blank"><i class="fa-file-text fa-fw"></i>YuQue</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="link fa-fw"></i>
+      推荐阅读
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://funnylog.gitee.io/mysql45/iframe/" title="https:&#x2F;&#x2F;funnylog.gitee.io&#x2F;mysql45&#x2F;iframe&#x2F;" rel="noopener" target="_blank">MySQL45讲</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://fishc.com.cn/" title="https:&#x2F;&#x2F;fishc.com.cn" rel="noopener" target="_blank">鱼C论坛</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-09 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">善善332</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+
+<!-- 自定义加上的 -->
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共255.2k字</span>
+</div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    <span class="post-meta-divider">|</span>
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+    </div>
+</body>
+
+<script type="text/javascript">
+var OriginTitile = document.title,
+    st;
+document.addEventListener("visibilitychange", function () {
+    document.hidden ? (document.title = "暂时离开一下", clearTimeout(st)) : (document.title =
+        "回来了O(∩_∩)O~", st = setTimeout(function () {
+            document.title = OriginTitile
+        }, 3e3))
+})
+</script>
+</html>
