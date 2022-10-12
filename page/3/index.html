@@ -297,7 +297,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-12 15:11:53" itemprop="dateModified" datetime="2022-10-12T15:11:53+08:00">2022-10-12</time>
+                <time title="修改时间：2022-10-12 15:20:59" itemprop="dateModified" datetime="2022-10-12T15:20:59+08:00">2022-10-12</time>
               </span>
 
           
@@ -316,195 +316,14 @@
 <p>节点的平衡因子是它的左子树的高度减去它的右子树的高度（有时相反）。带有 平衡因子1、0或 -1的节点被认为是平衡的。带有平衡因子 -2或2的节点被认为 是不平衡的，并需要重新平衡这个树。平衡因子可以直接存储在每个节点中，或 从可能存储在节点中的子树高度计算出来。</p>
 <p>一般我们所看见的都是排序平衡二叉树。 </p>
 <p>AVLtree使用场景：AVL树适合用于插入删除次数比较少，但查找多的情况。插 入删除导致很多的旋转，旋转是非常耗时的。AVL 在linux内核的vm area中使用。 </p>
-<h2 id="2-二叉搜索树"><a href="#2-二叉搜索树" class="headerlink" title="2. 二叉搜索树"></a>2. 二叉搜索树</h2><p>二叉搜索树也是一种树，适用与一般二叉树的全部操作，但二叉搜索树能够实现 数据的快速查找。</p>
-<p>二叉搜索树满足的条件： </p>
-<ol>
-<li>非空左子树的所有键值小于其根节点的键值 </li>
-<li>非空右子树的所有键值大于其根节点的键值 </li>
-<li>左右子树都是二叉搜索树</li>
-</ol>
-<p>二叉搜索树的应用场景：如果是没有退化称为链表的二叉树，查找效率就是 lgn，效率不错，但是一旦退换称为链表了，要么使用平衡二叉树，或者之后的 RB树，因为链表就是线性的查找效率。 </p>
-<h2 id="3-红黑树的定义"><a href="#3-红黑树的定义" class="headerlink" title="3. 红黑树的定义"></a>3. 红黑树的定义</h2><p>红黑树是一种二叉查找树，但在每个结点上增加了一个存储位表示结点的颜色， 可以是RED或者BLACK。通过对任何一条从根到叶子的路径上各个着色方式的 限制，红黑树确保没有一条路径会比其他路径长出两倍，因而是接近平衡的。 当二叉查找树的高度较低时，这些操作执行的比较快，但是当树的高度较高时， 这些操作的性能可能不比用链表好。红黑树（red-black tree）是一种平衡的二 叉查找树，它能保证在坏情况下，基本的动态操作集合运行时间为O(lgn)。 红黑树必须要满足的五条性质： </p>
-<ul>
-<li>性质一：节点是红色或者是黑色； 在树里面的节点不是红色的就是黑色的，没有其他 颜色，要不怎么叫红黑树呢，是吧。 </li>
-<li>性质二：根节点是黑色； 根节点总是黑色的。它不能为红。 </li>
-<li>性质三：每个叶节点（NIL或空节点）是黑色；</li>
-<li>性质四：每个红色节点的两个子节点都是黑色的（也就是说不存在两个连续的红色节 点）； 就是连续的两个节点不能是连续的红色，连续的两个节点的意思就是父节点与 子节点不能是连续的红色。 </li>
-<li>性质五：从任一节点到其每个叶节点的所有路径都包含相同数目的黑色节点。从根节点 到每一个NIL节点的路径中，都包含了相同数量的黑色节点。</li>
-</ul>
-<p>红黑树的应用场景：红黑树是一种不是非常严格的平衡二叉树，没有AVLtree那 么严格的平衡要求，所以它的平均查找，增添删除效率都还不错。广泛用在 C++的STL中。如map和set都是用红黑树实现的。 </p>
-<h2 id="4-B树定义"><a href="#4-B树定义" class="headerlink" title="4. B树定义"></a>4. B树定义</h2><p>B树和平衡二叉树稍有不同的是B树属于多叉树又名平衡多路查找树（查找路径 不只两个），不属于二叉搜索树的范畴，因为它不止两路，存在多路。 </p>
-<p>B树满足的条件： </p>
-<ul>
-<li>（1）树种的每个节点多拥有m个子节点且m&gt;&#x3D;2,空树除外（注：m阶代表一个树节 点多有多少个查找路径，m阶&#x3D;m路,当m&#x3D;2则是2叉树,m&#x3D;3则是3叉）； </li>
-<li>（2）除根节点外每个节点的关键字数量大于等于ceil(m&#x2F;2)-1个小于等于m-1个，非根 节点关键字数必须&gt;&#x3D;2;（注：ceil()是个朝正无穷方向取整的函数 如ceil(1.1)结果为2) </li>
-<li>（3）所有叶子节点均在同一层、叶子节点除了包含了关键字和关键字记录的指针外也 有指向其子节点的指针只不过其指针地址都为null对应下图后一层节点的空格子 </li>
-<li>（4）如果一个非叶节点有N个子节点，则该节点的关键字数等于N-1; </li>
-<li>（5）所有节点关键字是按递增次序排列，并遵循左小右大原则；</li>
-</ul>
-<p><img src="/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89-%E9%87%8D%E7%82%B9.assets/B%E6%A0%91.png" alt="B树"></p>
-<p> B树的应用场景：构造一个多阶的B类树，然后在尽量多的在结点上存储相关的信息， 保证层数尽量的少，以便后面我们可以更快的找到信息，磁盘的I&#x2F;O操作也少一些，而 且B类树是平衡树，每个结点到叶子结点的高度都是相同，这也保证了每个查询是稳定 的。 </p>
-<h2 id="5-B-树"><a href="#5-B-树" class="headerlink" title="5. B+树"></a>5. B+树</h2><p>B+树是B树的一个升级版，B+树是B树的变种树，有n棵子树的节点中含有n个 关键字，每个关键字不保存数据，只用来索引，数据都保存在叶子节点。是为文 件系统而生的。 </p>
-<p>相对于B树来说B+树更充分的利用了节点的空间，让查询速度更加稳定，其速度 完全接近于二分法查找。为什么说B+树查找的效率要比B树更高、更稳定；我们 先看看两者的区别 </p>
-<ul>
-<li>（1）B+跟B树不同，B+树的非叶子节点不保存关键字记录的指针，这样使得B+树每 个节点所能保存的关键字大大增加； </li>
-<li>（2）B+树叶子节点保存了父节点的所有关键字和关键字记录的指针，每个叶子节点的 关键字从小到大链接； </li>
-<li>（3）B+树的根节点关键字数量和其子节点个数相等; </li>
-<li>（4）B+的非叶子节点只进行数据索引，不会存实际的关键字记录的指针，所有数据地 址必须要到叶子节点才能获取到，所以每次数据查询的次数都一样；</li>
-</ul>
-<p><img src="/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89-%E9%87%8D%E7%82%B9.assets/B+%E6%A0%91.png" alt="B+树"></p>
-<p>特点： </p>
-<p>在B树的基础上每个节点存储的关键字数更多，树的层级更少所以查询数据更 快，所有指关键字指针都存在叶子节点，所以每次查找的次数都相同所以查询速 度更稳定; </p>
-<p>应用场景： 用在磁盘文件组织 数据索引和数据库索引。 </p>
-<h2 id="6-Trie树（字典树）"><a href="#6-Trie树（字典树）" class="headerlink" title="6. Trie树（字典树）"></a>6. Trie树（字典树）</h2><p>trie，又称前缀树，是一种有序树，用于保存关联数组，其中的键通常是字符 串。与二叉查找树不同，键不是直接保存在节点中，而是由节点在树中的位置决 定。一个节点的所有子孙都有相同的前缀，也就是这个节点对应的字符串，而根 节点对应空字符串。一般情况下，不是所有的节点都有对应的值，只有叶子节点 和部分内部节点所对应的键才有相关的值。 </p>
-<p>在图示中，键标注在节点中，值标注在节点之下。每一个完整的英文单词对应一 个特定的整数。Trie 可以看作是一个确定有限状态自动机，尽管边上的符号一 般是隐含在分支的顺序中的。 </p>
-<p>键不需要被显式地保存在节点中。图示中标注出完整的单词，只是为了演示 trie  的原理。</p>
-<p><img src="/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89-%E9%87%8D%E7%82%B9.assets/Trie%E6%A0%91(%E5%AD%97%E5%85%B8%E6%A0%91).png" alt="Trie树(字典树)"></p>
-<p>trie树的优点：利用字符串的公共前缀来节约存储空间，大限度地减少无谓的 字符串比较，查询效率比哈希表高。</p>
-<p>缺点：Trie树是一种比较简单的数据结构.理 解起来比较简单,正所谓简单的东西也得付出代价.故Trie树也有它的缺点,Trie树 的内存消耗非常大. </p>
-<p>其基本性质可以归纳为： </p>
-<ol>
-<li>根节点不包含字符，除根节点外每一个节点都只包含一个字符。 </li>
-<li>从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。 </li>
-<li>每个节点的所有子节点包含的字符都不相同。</li>
-</ol>
-<p>典型应用是用于统计，排序和保存大量的字符串（但不仅限于字符串），所以经 常被搜索引擎系统用于文本词频统计。字典树与字典很相似,当你要查一个单词 是不是在字典树中,首先看单词的第一个字母是不是在字典的第一层,如果不在,说 明字典树里没有该单词,如果在就在该字母的孩子节点里找是不是有单词的第二 个字母,没有说明没有该单词,有的话用同样的方法继续查找.字典树不仅可以用来 储存字母,也可以储存数字等其它数据。 </p>
-<h1 id="（2）-红黑树在STL上的应用"><a href="#（2）-红黑树在STL上的应用" class="headerlink" title="（2） 红黑树在STL上的应用"></a>（2） 红黑树在STL上的应用</h1><p>STL中set、multiset、map、multimap底层是红黑树实现的，而 unordered_map、unordered_set 底层是哈希表实现的。 </p>
-<p>multiset、multimap： 插入相同的key的时候，我们将后插入的key放在相等的 key的右边，之后不管怎么进行插入或删除操作，后加入的key始终被认为比之 前的大。 </p>
-<h2 id="8-（3）了解并查集吗？（低频）"><a href="#8-（3）了解并查集吗？（低频）" class="headerlink" title="8. （3）了解并查集吗？（低频）"></a>8. （3）了解并查集吗？（低频）</h2><p>什么是合并查找问题呢？</p>
-<p>顾名思义，就是既有合并又有查找操作的问题。举个例子，有一群人，他们之间 有若干好友关系。如果两个人有直接或者间接好友关系，那么我们就说他们在同 一个朋友圈中，这里解释下，如果Alice是Bob好友的好友，或者好友的好友的 好友等等，即通过若干好友可以认识，那么我们说Alice和Bob是间接好友。随 着时间的变化，这群人中有可能会有新的朋友关系，这时候我们会对当中某些人 是否在同一朋友圈进行询问。这就是一个典型的合并－查找操作问题，既包含了 合并操作，又包含了查找操作。 </p>
-<p>并查集，在一些有N个元素的集合应用问题中，我们通常是在开始时让每个元素 构成一个单元素的集合，然后按一定顺序将属于同一组的元素所在的集合合并， 其间要反复查找一个元素在哪个集合中。 </p>
-<p>并查集是一种树型的数据结构，用于处理一些不相交集合（Disjoint Sets）的合 并及查询问题。 </p>
-<p>并查集也是使用树形结构实现。不过，不是二叉树。每个元素对应一个节点，每 个组对应一棵树。在并查集中，哪个节点是哪个节点的父亲以及树的形状等信息 无需多加关注，整体组成一个树形结构才是重要的。类似森林 </p>
-<h1 id="（4）-贪心算法和动态规划的区别"><a href="#（4）-贪心算法和动态规划的区别" class="headerlink" title="（4） 贪心算法和动态规划的区别"></a>（4） 贪心算法和动态规划的区别</h1><p>贪心算法：局部优，划分的每个子问题都优，得到全局优，但是不能保证 是全局优解，所以对于贪心算法来说，解是从上到下的，一步一步优，直到 后。 动态规划：将问题分解成重复的子问题，每次都寻找左右子问题解中优的解， 一步步得到全局的优解.重复的子问题可以通过记录的方式，避免多次计算。 所以对于动态规划来说，解是从小到上，从底层所有可能性中找到优解，再一 步步向上。 分治法：和动态规划类似，将大问题分解成小问题，但是这些小问题是独立的， 没有重复的问题。独立问题取得解，再合并成大问题的解。 例子：比如钱币分为1元3元4元，要拿6元钱，贪心的话，先拿4，再拿两个1， 一共3张钱；实际优却是两张3元就够了。 </p>
-<h2 id="（5）-判断一个链表是否有环，如何找到这个环的起点"><a href="#（5）-判断一个链表是否有环，如何找到这个环的起点" class="headerlink" title="（5） 判断一个链表是否有环，如何找到这个环的起点"></a>（5） 判断一个链表是否有环，如何找到这个环的起点</h2><p>给定一个单链表，只给出头指针h： </p>
-<ol>
-<li>如何判断是否存在环？ </li>
-<li>如何知道环的长度？ </li>
-<li>如何找出环的连接点在哪里？ </li>
-<li>带环链表的长度是多少？</li>
-</ol>
-<p>解法： </p>
-<ol>
-<li>对于问题1，使用追赶的方法，设定两个指针slow、fast，从头指针开始， 每次分别前进1步、2步。如存在环，则两者相遇；如不存在环，fast遇到NULL 退出。 </li>
-<li>对于问题2，记录下问题1的碰撞点p，slow、fast从该点开始，再次碰撞所 走过的操作数就是环的长度s。 </li>
-<li>问题3：有定理：碰撞点p到连接点的距离&#x3D;头指针到连接点的距离，因此， 分别从碰撞点、头指针开始走，相遇的那个点就是连接点。(证明在后面附注) </li>
-<li>问题3中已经求出连接点距离头指针的长度，加上问题2中求出的环的长度， 二者之和就是带环单链表的长度</li>
-</ol>
-<h1 id="6）-实现一个strcpy函数（或者memcpy），如果内存可能重叠呢"><a href="#6）-实现一个strcpy函数（或者memcpy），如果内存可能重叠呢" class="headerlink" title="6） 实现一个strcpy函数（或者memcpy），如果内存可能重叠呢"></a>6） 实现一个strcpy函数（或者memcpy），如果内存可能重叠呢</h1><p>——大家一般认为名不见经传strcpy函数实现不是很难，流行的strcpy函数写法是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. char *my_strcpy(char *dst,const char *src)</span><br><span class="line">2. &#123;</span><br><span class="line">3. assert(dst != NULL);</span><br><span class="line">4. assert(src != NULL);</span><br><span class="line">5. char *ret = dst;</span><br><span class="line">6. while((* dst++ = * src++) != &#x27;\0&#x27;)</span><br><span class="line">7. ;</span><br><span class="line">8. return ret;</span><br><span class="line">9. &#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果注意到：</p>
-<p>1，检查指针有效性；</p>
-<p>2，返回目的指针des；</p>
-<p>3，源字符串的末尾 ‘\0’ 需要拷贝。</p>
-<h2 id="内存重叠"><a href="#内存重叠" class="headerlink" title="内存重叠"></a>内存重叠</h2><p>内存重叠：拷贝的目的地址在源地址范围内。所谓内存重叠就是拷贝的目的地址和源地址有重叠。</p>
-<p>在函数strcpy和函数memcpy都没有对内存重叠做处理的，使用这两个函数的时候只有程序员自己保证源地址和目标地址不重叠，或者使用memmove函数进行内存拷贝。</p>
-<p>memmove函数对内存重叠做了处理。</p>
-<p>strcpy的正确实现应为：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. char *my_strcpy(char *dst,const char *src)</span><br><span class="line">2. &#123;</span><br><span class="line">3. assert(dst != NULL);</span><br><span class="line">4. assert(src != NULL);</span><br><span class="line">5. char *ret = dst;</span><br><span class="line">6. memmove(dst,src,strlen(src)+1);</span><br><span class="line">7. return ret;</span><br><span class="line">8. &#125;</span><br></pre></td></tr></table></figure>
-
-<p>memmove函数实现时考虑到了内存重叠的情况，可以完成指定大小的内存拷贝</p>
-<h1 id="（7）-快排存在的问题，如何优化"><a href="#（7）-快排存在的问题，如何优化" class="headerlink" title="（7） 快排存在的问题，如何优化"></a>（7） 快排存在的问题，如何优化</h1><h2 id="快排的时间复杂度"><a href="#快排的时间复杂度" class="headerlink" title="快排的时间复杂度"></a>快排的时间复杂度</h2><p>时间复杂度  快平均是O（nlogn）,  慢的时候是O(n2);辅助空间也是</p>
-<p>O(logn)；   开始学快排时   疑惑的就是这个东西不知道怎么得来的，一种是通过数学运算可以的出来，还有一种是通过递归树来理解就容易多了</p>
-<p><img src="/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89-%E9%87%8D%E7%82%B9.assets/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6.png" alt="时间复杂度"></p>
-<p>所谓时间复杂度 理想的就是取到中位数情况，那么递归树就是一个完全二叉树，那么树的深度也就是 低为Logn，这个时候每一次又需要n次比较，所以时间复杂度nlogn，当快排为顺序或者逆序</p>
-<p>时，这个数为一个斜二叉树，深度为n，同样每次需要n次比较，那那么  坏需要n2的时间优化：</p>
-<p>1.当整个序列有序时退出算法；</p>
-<p>2.当序列长度很小时（根据经验是大概小于 8），应该使用常数更小的算法，比如插入排序等；</p>
-<p>3.随机选取分割位置；</p>
-<p>4.当分割位置不理想时，考虑是否重新选取分割位置；</p>
-<p>5.分割成两个序列时，只对其中一个递归进去，另一个序列仍可以在这一函数内继续划分，可以显著减小栈的大小（尾递归）：</p>
-<p>6.将单向扫描改成双向扫描，可以减少划分过程中的交换次数优化1：当待排序序列的长度分割到一定大小后，使用插入排序原因：对于很小和部分有序的数组，快排不如插排好。当待排序序列的长度分割到一定大小后，继续分割的效率比插入排序要差，此时可以使用插排而不是快排优化2：在一次分割结束后，可以把与Key相等的元素聚在一起，继续下次分割时，不用再对与key相等元素分割优化3：优化递归操作快排函数在函数尾部有两次递归操作，我们可以对其使用尾递归优化优点：如果待排序的序列划分极端不平衡，递归的深度将趋近于n，而栈的大小是很有限的，每次递归调用都会耗费一定的栈空间，函数的参数越多，每次递归</p>
-<p>耗费的空间也越多。优化后，可以缩减堆栈深度，由原来的O(n)缩减为</p>
-<p>O(logn)，将会提高性能。</p>
-<h1 id="（8）-Top-K问题（可以采取的方法有哪些，各自优点？）"><a href="#（8）-Top-K问题（可以采取的方法有哪些，各自优点？）" class="headerlink" title="（8） Top K问题（可以采取的方法有哪些，各自优点？）"></a>（8） Top K问题（可以采取的方法有哪些，各自优点？）</h1><p>1.将输入内容（假设用数组存放）进行完全排序，从中选出排在前K的元素即为所求。有了这个思路，我们可以选择相应的排序算法进行处理，目前来看快速排序，堆排序和归并排序都能达到O(nlogn)的时间复杂度。</p>
-<p>2.对输入内容进行部分排序，即只对前K大的元素进行排序（这K个元素即为所求）。此时我们可以选择冒泡排序或选择排序进行处理，即每次冒泡（选择）都能找到所求的一个元素。这类策略的时间复杂度是O(Kn)。</p>
-<p>3.对输入内容不进行排序，显而易见，这种策略将会有更好的性能开销。我们此时可以选择两种策略进行处理：用一个桶来装前k个数，桶里面可以按照 小堆来维护 a)利用 小堆维护一个大小为K的数组，目前该小根堆中的元素是排名前K的数，其中根是 小的数。此后，每次从原数组中取一个元素与根进行比较，如大于根的元素，则将根元素替换并进行堆调整（下沉），即保证小根堆中的元素仍然是排名前K的数，且根元素仍然 小；否则不予处理，取下一个数组元素继续该过程。该算法的时间复杂度是O(nlogK)，一般来说企业中都采用该策略处理 top-K问题，因为该算法不需要一次将原数组中的内容全部加载到内存中，而这正是海量数据处理必然会面临的一个关卡。</p>
-<p>b)利用快速排序的分划函数找到分划位置K，则其前面的内容即为所求。该算法是一种非常有效的处理方式，时间复杂度是O(n)（证明可以参考算法导论书籍）。对于能一次加载到内存中的数组，该策略非常优秀。</p>
-<h1 id="（9）-Bitmap的使用，存储和插入方法"><a href="#（9）-Bitmap的使用，存储和插入方法" class="headerlink" title="（9） Bitmap的使用，存储和插入方法"></a>（9） Bitmap的使用，存储和插入方法</h1><h2 id="BitMap从字面的意思"><a href="#BitMap从字面的意思" class="headerlink" title="BitMap从字面的意思"></a>BitMap从字面的意思</h2><p>很多人认为是位图，其实准确的来说，翻译成基于位的映射。</p>
-<p>在所有具有性能优化的数据结构中，大家使用  多的就是hash表，是的，在具有定位查找上具有O(1)的常量时间，多么的简洁优美。但是数据量大了，内存就不够了。</p>
-<p>当然也可以使用类似外排序来解决问题的，由于要走IO所以时间上又不行。</p>
-<p>所谓的Bit-map就是用一个bit位来标记某个元素对应的Value， 而Key即是该元素。由于采用了Bit为单位来存储数据，因此在存储空间方面，可以大大节省。</p>
-<p>其实如果你知道计数排序的话（算法导论中有一节讲过），你就会发现这个和计数排序很像。</p>
-<h2 id="bitmap应用"><a href="#bitmap应用" class="headerlink" title="bitmap应用"></a>bitmap应用</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1）可进行数据的快速查找，判重，删除，一般来说数据范围是int的10倍以下。</span><br><span class="line">2）去重数据而达到压缩数据</span><br></pre></td></tr></table></figure>
-
-<p>还可以用于爬虫系统中url去重、解决全组合问题。</p>
-<p>BitMap应用：排序示例</p>
-<p>假设我们要对0-7内的5个元素(4,7,2,5,3)排序（这里假设这些元素没有重复）。那么我们就可以采用Bit-map的方法来达到排序的目的。要表示8个数，我们就只需要8个Bit（1Bytes），首先我们开辟1Byte的空间，将这些空间的所有Bit位都置为0(如下图：)</p>
-<p><img src="/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89-%E9%87%8D%E7%82%B9.assets/image-20201113162002074.png" alt="image-20201113162002074"></p>
-<p>然后遍历这5个元素，首先第一个元素是4，那么就把4对应的位置为1（可以这样操作 p+(i&#x2F;8)|(0×01&lt;&lt;(i%8)) 当然了这里的操作涉及到Big-ending和Littleending的情况，这里默认为Big-ending。不过计算机一般是小端存储的，如</p>
-<p>intel。小端的话就是将倒数第5位置1）,因为是从零开始的，所以要把第五位置为一（如下图）：</p>
-<p><img src="/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89-%E9%87%8D%E7%82%B9.assets/image-20201113162009552.png" alt="image-20201113162009552"></p>
-<p>然后再处理第二个元素7，将第八位置为1,，接着再处理第三个元素，一直到后处理完所有的元素，将相应的位置为1，这时候的内存的Bit位的状态如下：</p>
-<p><img src="/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89-%E9%87%8D%E7%82%B9.assets/image-20201113162016525.png" alt="image-20201113162016525"></p>
-<p>然后我们现在遍历一遍Bit区域，将该位是一的位的编号输出（2，3，4，5，7），这样就达到了排序的目的。</p>
-<h2 id="bitmap排序复杂度分析"><a href="#bitmap排序复杂度分析" class="headerlink" title="bitmap排序复杂度分析"></a>bitmap排序复杂度分析</h2><p>Bitmap排序需要的时间复杂度和空间复杂度依赖于数据中  大的数字。</p>
-<p>bitmap排序的时间复杂度不是O(N)的，而是取决于待排序数组中的大值</p>
-<p>MAX，在实际应用上关系也不大，比如我开10个线程去读byte数组，那么复杂度为:O(Max&#x2F;10)。也就是要是读取的，可以用多线程的方式去读取。时间复杂度方面也是O(Max&#x2F;n)，其中Max为byte[]数组的大小，n为线程大小。空间复杂度应该就是O(Max&#x2F;8)bytes吧</p>
-<h2 id="BitMap算法流程"><a href="#BitMap算法流程" class="headerlink" title="BitMap算法流程"></a>BitMap算法流程</h2><p>假设需要排序或者查找的 大数MAX&#x3D;10000000（lz:这里MAX应该是 大的数而不是int数据的总数！），那么我们需要申请内存空间的大小为int a[1 + </p>
-<p>MAX&#x2F;32]。</p>
-<p>其中：a[0]在内存中占32为可以对应十进制数0-31，依次类推： bitmap表为：</p>
-<p>a[0]———&gt;0-31 a[1]———&gt;32-63 a[2]———&gt;64-95</p>
-<p>a[3]———&gt;96-127</p>
-<p><img src="/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89-%E9%87%8D%E7%82%B9.assets/image-20201113162104008.png" alt="image-20201113162104008"></p>
-<p>我们要把一个整数N映射到Bit-Map中去，首先要确定把这个N Mapping到哪一个数组元素中去，即确定映射元素的index。我们用int类型的数组作为map的元素，这样我们就知道了一个元素能够表示的数字个数(这里是32)。于是N&#x2F;32 就可以知道我们需要映射的key了。所以余下来的那个N%32就是要映射到的位数。</p>
-<p>1.求十进制数对应在数组a中的下标：</p>
-<p>先由十进制数n转换为与32的余可转化为对应在数组a中的下标。</p>
-<p>如十进制数0-31，都应该对应在a[0]中，比如n&#x3D;24,那么 n&#x2F;32&#x3D;0，则24对应在数组a中的下标为0。又比如n&#x3D;60,那么n&#x2F;32&#x3D;1，则60对应在数组a中的下标为 1，同理可以计算0-N在数组a中的下标。</p>
-<p>i &#x3D; N&gt;&gt;K % 结果就是N&#x2F;(2^K)</p>
-<p>Note: map的范围是[0, 原数组 大的数对应的2的整次方数-1]。</p>
-<p>2.求十进制数对应数组元素a[i]在0-31中的位m：</p>
-<p>十进制数0-31就对应0-31，而32-63则对应也是0-31，即给定一个数n可以通过模32求得对应0-31中的数。</p>
-<p>m &#x3D; n &amp; ((1 &lt;&lt; K) - 1) %结果就是n%(2^K)</p>
-<p>3.利用移位0-31使得对应第m个bit位为1</p>
-<p>如a[i]的第m位置1：a[i] &#x3D; a[i] | (1&lt;</p>
-<p>如：将当前4对应的bit位置1的话，只需要1左移4位与B[0] | 即可。</p>
-<p>Note:</p>
-<p>1 p+(i&#x2F;8)|(0×01&lt;&lt;(i%8))这样也可以？</p>
-<p>2 同理将int型变量a的第k位清0，即a&#x3D;a&amp;~(1&lt;</p>
-<h2 id="BitMap算法评价"><a href="#BitMap算法评价" class="headerlink" title="BitMap算法评价"></a>BitMap算法评价</h2><p>优点：</p>
-<ol>
-<li><p>运算效率高，不进行比较和移位；</p>
-</li>
-<li><p>占用内存少，比如   大的数MAX&#x3D;10000000；只需占用内存为</p>
-</li>
-</ol>
-<p>MAX&#x2F;8&#x3D;1250000Byte&#x3D;1.25M。</p>
-<ol start="3">
-<li></li>
-</ol>
-<p>缺点：</p>
-<ol>
-<li><p>所有的数据不能重复，即不可对重复的数据进行排序。（少量重复数据查找还是可以的，用2-bitmap）。</p>
-</li>
-<li><p>当数据类似（1，1000，10万）只有3个数据的时候，用bitmap时间复杂度和空间复杂度相当大，只有当数据比较密集时才有优势。</p>
-</li>
-</ol>
-<h1 id="（10）-字典树的理解以及在统计上的应用"><a href="#（10）-字典树的理解以及在统计上的应用" class="headerlink" title="（10） 字典树的理解以及在统计上的应用"></a>（10） 字典树的理解以及在统计上的应用</h1><p>Trie的核心思想是空间换时间。利用字符串的公共前缀来降低查询时间的开销以达到提高效率的目的。Trie树也有它的缺点,Trie树的内存消耗非常大.当然,或许用左儿子右兄弟的方法建树的话,可能会好点. 就是在海量数据中找出某一个数，比如2亿QQ号中查找出某一个特定的QQ号</p>
-<h1 id="（11）-N个骰子出现和为m的概率"><a href="#（11）-N个骰子出现和为m的概率" class="headerlink" title="（11） N个骰子出现和为m的概率"></a>（11） N个骰子出现和为m的概率</h1><p>典型的可以用动态规划的思想来完成</p>
-<p>1.现在变量有：骰子个数，点数和。当有k个骰子，点数和为n时，出现次数记为 f(k,n)。那与k-1个骰子阶段之间的关系是怎样的？</p>
-<p>2.当我有k-1个骰子时，再增加一个骰子，这个骰子的点数只可能为1、2、3、</p>
-<p>4、5或6。那k个骰子得到点数和为n的情况有：</p>
-<p>(k-1,n-1)：第k个骰子投了点数1</p>
-<p>(k-1,n-2)：第k个骰子投了点数2</p>
-<p>(k-1,n-3)：第k个骰子投了点数3</p>
-<p>…</p>
-<p>(k-1,n-6)：第k个骰子投了点数6</p>
-<p>在k-1个骰子的基础上，再增加一个骰子出现点数和为n的结果只有这6种情况！所以：f(k,n)&#x3D;f(k-1,n-1)+f(k-1,n-2)+f(k-1,n-3)+f(k-1,n-4)+f(k-1,n-5)+f(k-</p>
-<p>1,n-6)</p>
-<p>3.有1个骰子，f(1,1)&#x3D;f(1,2)&#x3D;f(1,3)&#x3D;f(1,4)&#x3D;f(1,5)&#x3D;f(1,6)&#x3D;1。</p>
-<p>用递归就可以解决这个问题：</p>
-<p><img src="/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89-%E9%87%8D%E7%82%B9.assets/%E9%80%92%E5%BD%92.jpg" alt="递归"></p>
-<p>用迭代来完成</p>
-<p><img src="/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89-%E9%87%8D%E7%82%B9.assets/%E8%BF%AD%E4%BB%A3.jpg" alt="迭代"></p>
-<h1 id="（19）-海量数据问题（可参考左神的书）"><a href="#（19）-海量数据问题（可参考左神的书）" class="headerlink" title="（19） 海量数据问题（可参考左神的书）"></a>（19） 海量数据问题（可参考左神的书）</h1><p>目前关于海量数据想到的解决办法：</p>
-<p>1.bitmap</p>
-<p>2.桶排序，外部排序，将需要排序的放到外存上，不用全部放到内存上</p>
-<h1 id="（20）-一致性哈希说明"><a href="#（20）-一致性哈希说明" class="headerlink" title="（20） 一致性哈希说明"></a>（20） 一致性哈希说明</h1><p>优点</p>
-<p>1.当后端是缓存服务器时，经常使用一致性哈希算法来进行负载均衡。使用一致性哈希的好处在于，增减集群的缓存服务器时，只有少量的缓存会失效，回源量较小。</p>
-<p>2.尽量减少数据丢失问题，减少移动数据的风险</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/10/09/21-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89-%E9%87%8D%E7%82%B9/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -556,7 +375,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-12 15:11:28" itemprop="dateModified" datetime="2022-10-12T15:11:28+08:00">2022-10-12</time>
+                <time title="修改时间：2022-10-12 15:15:48" itemprop="dateModified" datetime="2022-10-12T15:15:48+08:00">2022-10-12</time>
               </span>
 
           
@@ -580,181 +399,14 @@
 <li>创建一个对象需要消耗的资源过多，如要访问IO和数据库等资源； </li>
 <li>需要定义大量的静态常量和静态方法（如工具类）的环境，可以采用单例模式 （当然，也可以直接声明为static的方式）。</li>
 </ul>
-<h2 id="2-工厂模式：定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂-方法使一个类的实例化延迟到其子类。"><a href="#2-工厂模式：定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂-方法使一个类的实例化延迟到其子类。" class="headerlink" title="2. 工厂模式：定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂 方法使一个类的实例化延迟到其子类。"></a>2. 工厂模式：定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂 方法使一个类的实例化延迟到其子类。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">接口</span><br><span class="line"></span><br><span class="line">public interface Fruit &#123;       </span><br><span class="line">public void print();   &#125;   </span><br><span class="line">2个实现类</span><br><span class="line">public class Apple implements Fruit&#123;  </span><br><span class="line">    @Override       </span><br><span class="line">    public void print() &#123;           </span><br><span class="line"> 	   System.out.println(&quot;我是一个苹果&quot;);       </span><br><span class="line"> 	&#125;  </span><br><span class="line">&#125;   </span><br><span class="line">public class Orange implements Fruit&#123;  </span><br><span class="line">    @Override       </span><br><span class="line">    public void print() &#123;           </span><br><span class="line"> 	   System.out.println(&quot;我是一个橘子&quot;);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;   </span><br><span class="line"></span><br><span class="line">工厂类</span><br><span class="line"></span><br><span class="line">public class FruitFactory &#123;       </span><br><span class="line">	public Fruit produce(String type)&#123;           </span><br><span class="line">		if(type.equals(&quot;apple&quot;))&#123;               </span><br><span class="line">			return new Apple();           </span><br><span class="line">		&#125;else if(type.equals(&quot;orange&quot;))&#123;               </span><br><span class="line">			return new Orange();           </span><br><span class="line">		&#125;else&#123;               </span><br><span class="line">			System.out.println(&quot;请输入正确的类型!&quot;);                 </span><br><span class="line">		return null;            </span><br><span class="line">		&#125;       </span><br><span class="line">	&#125;   </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
-
-<p>使用场景：jdbc连接数据库，硬件访问，降低对象的产生和销毁</p>
-<h2 id="3-抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无须指-定它们的具体类。"><a href="#3-抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无须指-定它们的具体类。" class="headerlink" title="3. 抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无须指 定它们的具体类。"></a>3. 抽象工厂模式：为创建一组相关或相互依赖的对象提供一个接口，而且无须指 定它们的具体类。</h2><p>相对于工厂模式，我们可以新增产品类（只需要实现产品接口），只需要同时新 增一个工厂类，客户端就可以轻松调用新产品的代码。 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">interface food&#123;&#125; </span><br><span class="line">class A implements food&#123;&#125; </span><br><span class="line">class B implements food&#123;&#125; </span><br><span class="line">interface produce&#123; food get();&#125; </span><br><span class="line">class FactoryForA implements produce&#123;     </span><br><span class="line">	@Override     </span><br><span class="line">	public food get() &#123;         </span><br><span class="line">		return new A();    </span><br><span class="line">    &#125; </span><br><span class="line">&#125; </span><br><span class="line">class FactoryForB implements produce&#123;     </span><br><span class="line">	@Override     </span><br><span class="line">	public food get() &#123;         </span><br><span class="line">	return new B();     </span><br><span class="line">	&#125; </span><br><span class="line">&#125; </span><br><span class="line">public class AbstractFactory &#123;     </span><br><span class="line">	public void ClientCode(String name)&#123;         </span><br><span class="line">		food x= new FactoryForA().get();         </span><br><span class="line">		x = new FactoryForB().get();     </span><br><span class="line">	&#125; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-
-<p>使用场景：一个对象族（或是一组没有任何关系的对象）都有相同的约束。 涉及不同操作系统的时候，都可以考虑使用抽象工厂模式 </p>
-<h2 id="4-建造者模式：将一个复杂对象的构建与它的表示分离，使得同样的构建过程可-以创建不同的表示。"><a href="#4-建造者模式：将一个复杂对象的构建与它的表示分离，使得同样的构建过程可-以创建不同的表示。" class="headerlink" title="4.建造者模式：将一个复杂对象的构建与它的表示分离，使得同样的构建过程可 以创建不同的表示。"></a>4.建造者模式：将一个复杂对象的构建与它的表示分离，使得同样的构建过程可 以创建不同的表示。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">public class Build &#123;     </span><br><span class="line">	static class Student&#123;     </span><br><span class="line">	String name = null ;         </span><br><span class="line">		int number = -1 ;         </span><br><span class="line">		String sex = null ;     </span><br><span class="line">	public Student(Builder builder)         &#123;     </span><br><span class="line">	this.name=builder.name;     </span><br><span class="line">	this.number=builder.number;     </span><br><span class="line">	this.sex=builder.sex;     </span><br><span class="line">	&#125;         </span><br><span class="line">		static class Builder&#123;</span><br><span class="line">            </span><br><span class="line">		String name = null ;             </span><br><span class="line">		int number = -1 ;             </span><br><span class="line">		String sex = null ;             </span><br><span class="line">		public Builder setName(String name)&#123;                 </span><br><span class="line">		this.name=name;                 </span><br><span class="line">		return this;             </span><br><span class="line">		&#125;             </span><br><span class="line">		public Builder setNumber(int number)&#123;                 </span><br><span class="line">		this.number=number;                 </span><br><span class="line">		return this;             </span><br><span class="line">		&#125;             </span><br><span class="line">		public Builder setSex(String sex)&#123;                 </span><br><span class="line">		this.sex=sex;                 </span><br><span class="line">		return this;             </span><br><span class="line">		&#125;             </span><br><span class="line">		public Student build()&#123;                 </span><br><span class="line">		return new Student(this);            </span><br><span class="line">		&#125;</span><br><span class="line"> &#125;                 </span><br><span class="line">&#125;     </span><br><span class="line">public static void main(String[] args) &#123;     </span><br><span class="line">Student A=new Student.Builder().setName(&quot;张 三&quot;).setNumber(1).build();     Student B=new Student.Builder().setSex(&quot;男&quot;).setName(&quot;李四&quot;).build();      </span><br><span class="line">	System.out.println(A.name+&quot; &quot;+A.number+&quot; &quot;+A.sex);         				System.out.println(B.name+&quot; &quot;+B.number+&quot; &quot;+B.sex);     </span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p> 使用场景：</p>
-<ol>
-<li>相同的方法，不同的执行顺序，产生不同的事件结果时，可以采用建造者模 式。 </li>
-<li>多个部件或零件，都可以装配到一个对象中，但是产生的运行结果又不相同 时，则可以使用该模式。 </li>
-<li>产品类非常复杂，或者产品类中的调用顺序不同产生了不同的效能，这个时候 使用建造者模式非常合适。</li>
-</ol>
-<h2 id="5-原型模式：用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的-对象。"><a href="#5-原型模式：用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的-对象。" class="headerlink" title="5. 原型模式：用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的 对象。"></a>5. 原型模式：用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的 对象。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class Prototype implements Cloneable&#123;     </span><br><span class="line">	private String name;     </span><br><span class="line">	public String getName() &#123;         </span><br><span class="line">		return name;     </span><br><span class="line">	&#125;     </span><br><span class="line">	public void setName(String name) &#123;         </span><br><span class="line">	this.name = name;     </span><br><span class="line">	&#125;     </span><br><span class="line">	@Override     </span><br><span class="line">	protected Object clone()   &#123;         </span><br><span class="line">		try &#123;             </span><br><span class="line">			return super.clone();         </span><br><span class="line">		&#125; catch (CloneNotSupportedException e) &#123;             </span><br><span class="line">			e.printStackTrace();         </span><br><span class="line">		&#125;finally &#123;             </span><br><span class="line">			return null;         </span><br><span class="line">		&#125;     </span><br><span class="line">	&#125;     </span><br><span class="line">	public static void main ( String[] args)&#123;         </span><br><span class="line">		Prototype pro = new Prototype();         </span><br><span class="line">		Prototype pro1 = (Prototype)pro.clone();     </span><br><span class="line">	&#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-
-
-
-<p>原型模式实际上就是实现Cloneable接口，重写clone（）方法。 </p>
-<p>使用原型模式的优点： </p>
-<p>1.性能优良 </p>
-<p>原型模式是在内存二进制流的拷贝，要比直接new一个对象性能好很多，特别是 要在一个循环体内产生大量的对象时，原型模式可以更好地体现其优点。 </p>
-<p>2.逃避构造函数的约束 </p>
-<p>这既是它的优点也是缺点，直接在内存中拷贝，构造函数是不会执行的（参见 13.4节）。</p>
-<p>使用场景： </p>
-<p>资源优化场景 类初始化需要消化非常多的资源，这个资源包括数据、硬件资源等。 </p>
-<p>性能和安全要求的场景 通过new产生一个对象需要非常繁琐的数据准备或访问权限，则可以使用原型模 式。 </p>
-<p>一个对象多个修改者的场景 一个对象需要提供给其他对象访问，而且各个调用者可能都需要修改其值时，可 以考虑使用原型模式拷贝多个对象供调用者使用。</p>
-<p>浅拷贝和深拷贝：</p>
-<p>浅拷贝：Object类提供的方法clone只是拷贝本对象，其对象内部的数组、引用 对象等都不拷贝，还是指向原生对象的内部元素地址，这种拷贝就叫做浅拷贝， 其他的原始类型比如int、long、char、string（当做是原始类型）等都会被拷 贝。 </p>
-<p>注意：　使用原型模式时，引用的成员变量必须满足两个条件才不会被拷贝：一 是类的成员变量，而不是方法内变量；二是必须是一个可变的引用对象，而不是 一个原始类型或不可变对象。 </p>
-<p>深拷贝：对私有的类变量进行独立的拷贝       </p>
-<p>如：this.arrayList &#x3D; (ArrayList)this.arrayList.clone();</p>
-<h2 id="6-适配器模式：将一个类的接口变换成客户端所期待的另一种接口，从而使原本-因接口不匹配而无法在一起工作的两个类能够在一起工作。"><a href="#6-适配器模式：将一个类的接口变换成客户端所期待的另一种接口，从而使原本-因接口不匹配而无法在一起工作的两个类能够在一起工作。" class="headerlink" title="6. 适配器模式：将一个类的接口变换成客户端所期待的另一种接口，从而使原本 因接口不匹配而无法在一起工作的两个类能够在一起工作。"></a>6. 适配器模式：将一个类的接口变换成客户端所期待的另一种接口，从而使原本 因接口不匹配而无法在一起工作的两个类能够在一起工作。</h2><p>主要可分为3种： </p>
-<ol>
-<li>类适配：创建新类，继承源类，并实现新接口，例如  class  adapter extends oldClass  implements newFunc{} </li>
-<li>对象适配：创建新类持源类的实例，并实现新接口，例如  class adapter implements newFunc { private oldClass oldInstance ;} </li>
-<li>接口适配：创建新的抽象类实现旧接口方法。例如  abstract class adapter implements oldClassFunc { void newFunc();}</li>
-</ol>
-<p>使用场景： </p>
-<p>你有动机修改一个已经投产中的接口时，适配器模式可能是适合你的模式。比 如系统扩展了，需要使用一个已有或新建立的类，但这个类又不符合系统的接 口，怎么办？使用适配器模式，这也是我们例子中提到的。</p>
-<h2 id="7-装饰器模式：动态地给一个对象添加一些额外的职责。就增加功能来说，装饰-器模式相比生成子类更为灵活-。"><a href="#7-装饰器模式：动态地给一个对象添加一些额外的职责。就增加功能来说，装饰-器模式相比生成子类更为灵活-。" class="headerlink" title="7. 装饰器模式：动态地给一个对象添加一些额外的职责。就增加功能来说，装饰 器模式相比生成子类更为灵活 。"></a>7. 装饰器模式：动态地给一个对象添加一些额外的职责。就增加功能来说，装饰 器模式相比生成子类更为灵活 。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">interface Source&#123; void method();&#125; </span><br><span class="line">public class Decorator implements Source&#123;     </span><br><span class="line">	private Source source ;     </span><br><span class="line">	public void decotate1()&#123;         </span><br><span class="line">		System.out.println(&quot;decorate&quot;);     </span><br><span class="line">	&#125;     </span><br><span class="line">	@Override     </span><br><span class="line">	public void method() &#123;         </span><br><span class="line">		decotate1();         </span><br><span class="line">		source.method();     </span><br><span class="line">	&#125; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-
-<p>使用场景： </p>
-<ol>
-<li>需要扩展一个类的功能，或给一个类增加附加功能。</li>
-<li>需要动态地给一个对象增加功能，这些功能可以再动态地撤销。 </li>
-<li>需要为一批的兄弟类进行改装或加装功能，当然是首选装饰模式。</li>
-</ol>
-<h2 id="8-代理模式：为其他对象提供一种代理以控制对这个对象的访问。"><a href="#8-代理模式：为其他对象提供一种代理以控制对这个对象的访问。" class="headerlink" title="8. 代理模式：为其他对象提供一种代理以控制对这个对象的访问。"></a>8. 代理模式：为其他对象提供一种代理以控制对这个对象的访问。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">interface Source&#123; void method();&#125; </span><br><span class="line">class OldClass implements Source&#123;     </span><br><span class="line">	@Override     </span><br><span class="line">	public void method() &#123;     </span><br><span class="line">	&#125; </span><br><span class="line">&#125; </span><br><span class="line">class Proxy implements Source&#123;     </span><br><span class="line">	private Source source = new OldClass();     </span><br><span class="line">	void doSomething()&#123;&#125;     </span><br><span class="line">	@Override    </span><br><span class="line">	public void method() &#123;         </span><br><span class="line">		new Class1().Func1();         </span><br><span class="line">		source.method();         </span><br><span class="line">		new Class2().Func2();         </span><br><span class="line">		doSomething();     </span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="9-中介者模式：用一个中介对象封装一系列的对象交互，中介者使各对象不需要-显示地相互作用，从而使其耦合松散，而且可以独立地改变它们之间的交互。"><a href="#9-中介者模式：用一个中介对象封装一系列的对象交互，中介者使各对象不需要-显示地相互作用，从而使其耦合松散，而且可以独立地改变它们之间的交互。" class="headerlink" title="9. 中介者模式：用一个中介对象封装一系列的对象交互，中介者使各对象不需要 显示地相互作用，从而使其耦合松散，而且可以独立地改变它们之间的交互。"></a>9. 中介者模式：用一个中介对象封装一系列的对象交互，中介者使各对象不需要 显示地相互作用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public abstract class Mediator &#123;      </span><br><span class="line">	//定义同事类      </span><br><span class="line">	protected ConcreteColleague1 c1;      </span><br><span class="line">	protected ConcreteColleague2 c2;      </span><br><span class="line">	//通过getter/setter方法把同事类注入进来      </span><br><span class="line">	public ConcreteColleague1 getC1() &#123;              </span><br><span class="line">		return c1;      </span><br><span class="line">	&#125;</span><br><span class="line">  public void setC1(ConcreteColleague1 c1) &#123;              </span><br><span class="line"> 	 this.c1 = c1;      </span><br><span class="line">  &#125;      </span><br><span class="line">  public ConcreteColleague2 getC2() &#123;             </span><br><span class="line"> 	 return c2; &#125;     </span><br><span class="line">  public void setC2(ConcreteColleague2 c2) &#123;       </span><br><span class="line">	  this.c2 = c2;     </span><br><span class="line">  &#125;    </span><br><span class="line">  //中介者模式的业务逻辑     </span><br><span class="line">  public abstract void doSomething1();     </span><br><span class="line">  public abstract void doSomething2(); </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-
-<p>使用场景： 中介者模式适用于多个对象之间紧密耦合的情况，紧密耦合的标准是：在类图中 出现了蜘蛛网状结构，即每个类都与其他的类有直接的联系。 </p>
-<h2 id="10-命令模式：将一个请求封装成一个对象，从而让你使用不同的请求把客户端-参数化，对请求排队或者记录请求日志，可以提供命令的撤销和恢复功能。"><a href="#10-命令模式：将一个请求封装成一个对象，从而让你使用不同的请求把客户端-参数化，对请求排队或者记录请求日志，可以提供命令的撤销和恢复功能。" class="headerlink" title="10. 命令模式：将一个请求封装成一个对象，从而让你使用不同的请求把客户端 参数化，对请求排队或者记录请求日志，可以提供命令的撤销和恢复功能。"></a>10. 命令模式：将一个请求封装成一个对象，从而让你使用不同的请求把客户端 参数化，对请求排队或者记录请求日志，可以提供命令的撤销和恢复功能。</h2><p>Receiver接受者角色：该角色就是干活的角色，命令传递到这里是应该被执行的 </p>
-<p>Command命令角色：需要执行的所有命令都在这里声明 </p>
-<p>Invoker调用者角色：接收到命令，并执行命令 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">//通用Receiver类 </span><br><span class="line">public abstract class Receiver &#123;     </span><br><span class="line">	public abstract void doSomething(); </span><br><span class="line">&#125; </span><br><span class="line">//具体Receiver类 </span><br><span class="line">public class ConcreteReciver1 extends Receiver&#123;      </span><br><span class="line">	//每个接收者都必须处理一定的业务逻辑      </span><br><span class="line">	public void doSomething()&#123; &#125;  </span><br><span class="line">&#125; </span><br><span class="line">public class ConcreteReciver2 extends Receiver&#123;      </span><br><span class="line">	//每个接收者都必须处理一定的业务逻辑      </span><br><span class="line">	public void doSomething()&#123; &#125;  </span><br><span class="line">&#125; </span><br><span class="line">//抽象Command类 public abstract class Command &#123;     </span><br><span class="line">	public abstract void execute(); </span><br><span class="line">&#125; </span><br><span class="line">//具体的Command类 </span><br><span class="line">public class ConcreteCommand1 extends Command &#123;      </span><br><span class="line">	//对哪个Receiver类进行命令处理      </span><br><span class="line">	private Receiver receiver;   </span><br><span class="line">	//构造函数传递接收者   </span><br><span class="line">	public ConcreteCommand1(Receiver _receiver)&#123;   </span><br><span class="line">		this.receiver = _receiver;     </span><br><span class="line">	&#125;  </span><br><span class="line">	//必须实现一个命令 </span><br><span class="line">	public void execute() &#123;   </span><br><span class="line">	//业务处理        </span><br><span class="line">		this.receiver.doSomething();    </span><br><span class="line">	&#125; 	</span><br><span class="line">&#125; </span><br><span class="line">public class ConcreteCommand2 extends Command &#123;  </span><br><span class="line">	//哪个Receiver类进行命令处理   </span><br><span class="line">	private Receiver receiver; </span><br><span class="line">	//构造函数传递接收者</span><br><span class="line">	public ConcreteCommand2(Receiver _receiver)&#123;    </span><br><span class="line">		this.receiver = _receiver;   </span><br><span class="line">&#125;     </span><br><span class="line">//必须实现一个命令 </span><br><span class="line"> public void execute() &#123;      </span><br><span class="line">	 //业务处理      </span><br><span class="line">	 this.receiver.doSomething(); </span><br><span class="line">	 &#125;  </span><br><span class="line"> &#125; </span><br><span class="line"> //调用者Invoker类 public class Invoker &#123;   </span><br><span class="line"> private Command command;</span><br><span class="line"> 	public void setCommand(Command _command)&#123;    </span><br><span class="line"> 	this.command = _command;  </span><br><span class="line"> &#125;</span><br><span class="line">public void action() &#123;      </span><br><span class="line">	this.command.execute();  </span><br><span class="line">	&#125; </span><br><span class="line">&#125; </span><br><span class="line">	//场景类 </span><br><span class="line">public class Client &#123; </span><br><span class="line">	public static void main(String[] args)&#123;      </span><br><span class="line">		Invoker invoker = new Invoker();       </span><br><span class="line">		Receiver receiver = new ConcreteReceiver1();</span><br><span class="line">    	Command command = new ConcreteCommand1(receiver);         				invoker.setCommand(command);    </span><br><span class="line">     	invoker.action(); </span><br><span class="line">     &#125; 	</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-
-
-
-<p>使用场景： 认为是命令的地方就可以采用命令模式，例如，在GUI开发中，一个按钮的点击 是一个命令，可以采用命令模式；模拟DOS命令的时候，当然也要采用命令模<br>式；触发－反馈机制的处理等。</p>
-<h2 id="11-责任链模式：使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。"><a href="#11-责任链模式：使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。" class="headerlink" title="11.责任链模式：使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。"></a>11.责任链模式：使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public abstract class Handler &#123;</span><br><span class="line">     private Handler nextHandler;</span><br><span class="line">     //每个处理者都必须对请求做出处理</span><br><span class="line">     public final Response handleMessage(Request request)&#123;</span><br><span class="line">             Response response = null;  </span><br><span class="line">             //判断是否是自己的处理级别</span><br><span class="line">             if(this.getHandlerLevel().equals(request.getRequestLevel()))&#123;</span><br><span class="line">                    response = this.echo(request);</span><br><span class="line">             &#125;else&#123;  //不属于自己的处理级别</span><br><span class="line">                    //判断是否有下一个处理者</span><br><span class="line">                    if(this.nextHandler != null)&#123;</span><br><span class="line">                            response = this.nextHandler.handleMessage(request);</span><br><span class="line">                    &#125;else&#123;</span><br><span class="line">                            //没有适当的处理者，业务自行处理</span><br><span class="line">                    &#125;</span><br><span class="line">             &#125;</span><br><span class="line">             return response;</span><br><span class="line">     &#125;</span><br><span class="line">     //设置下一个处理者是谁</span><br><span class="line">     public void setNext(Handler _handler)&#123;</span><br><span class="line">             this.nextHandler = _handler;</span><br><span class="line">     &#125;</span><br><span class="line">     //每个处理者都有一个处理级别</span><br><span class="line">     protected abstract Level getHandlerLevel();</span><br><span class="line">     //每个处理者都必须实现处理任务</span><br><span class="line">     protected abstract Response echo(Request request);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="12-策略模式：定义一组算法，将每个算法都封装起来，并且使它们之间可以互换。"><a href="#12-策略模式：定义一组算法，将每个算法都封装起来，并且使它们之间可以互换。" class="headerlink" title="12.策略模式：定义一组算法，将每个算法都封装起来，并且使它们之间可以互换。"></a>12.策略模式：定义一组算法，将每个算法都封装起来，并且使它们之间可以互换。</h2><p>使用场景：</p>
-<ol>
-<li><p>多个类只有在算法或行为上稍有不同的场景。</p>
-</li>
-<li><p>算法需要自由切换的场景。</p>
-</li>
-<li><p>需要屏蔽算法规则的场景。</p>
-</li>
-</ol>
-<h2 id="13-迭代器模式：它提供一种方法访问一个容器对象中各个元素，而又不需暴露该对象的内部细节。"><a href="#13-迭代器模式：它提供一种方法访问一个容器对象中各个元素，而又不需暴露该对象的内部细节。" class="headerlink" title="13.迭代器模式：它提供一种方法访问一个容器对象中各个元素，而又不需暴露该对象的内部细节。"></a>13.迭代器模式：它提供一种方法访问一个容器对象中各个元素，而又不需暴露该对象的内部细节。</h2><p>迭代器模式已经被淘汰，java中已经把迭代器运用到各个聚集类（collection）中了，使用java自带的迭代器就已经满足我们的需求了。</p>
-<h2 id="14-组合模式：将对象组合成树形结构以表示“部分-整体”的层次结构，使得用户对单个对象和组合对象的使用具有一致性。"><a href="#14-组合模式：将对象组合成树形结构以表示“部分-整体”的层次结构，使得用户对单个对象和组合对象的使用具有一致性。" class="headerlink" title="14.组合模式：将对象组合成树形结构以表示“部分-整体”的层次结构，使得用户对单个对象和组合对象的使用具有一致性。"></a>14.组合模式：将对象组合成树形结构以表示“部分-整体”的层次结构，使得用户对单个对象和组合对象的使用具有一致性。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Composite extends Component &#123;</span><br><span class="line">     //构件容器</span><br><span class="line">     private ArrayList componentArrayList = new ArrayList();</span><br><span class="line">     //增加一个叶子构件或树枝构件</span><br><span class="line">     public void add(Component component)&#123;</span><br><span class="line">             this.componentArrayList.add(component);</span><br><span class="line">     &#125;</span><br><span class="line">     //删除一个叶子构件或树枝构件</span><br><span class="line">     public void remove(Component component)&#123;</span><br><span class="line">this.componentArrayList.remove(component);</span><br><span class="line">     &#125;</span><br><span class="line">     //获得分支下的所有叶子构件和树枝构件</span><br><span class="line">     public ArrayList getChildren()&#123;</span><br><span class="line">             return this.componentArrayList;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用场景：</p>
-<ol>
-<li><p>维护和展示部分-整体关系的场景，如树形菜单、文件和文件夹管理。</p>
-</li>
-<li><p>从一个整体中能够独立出部分模块或功能的场景。</p>
-</li>
-</ol>
-<h2 id="15-观察者模式：定义对象间一种一对多的依赖关系，使得每当一个对象改变状态，则所有依赖于它的对象都会得到通知并被自动更新。"><a href="#15-观察者模式：定义对象间一种一对多的依赖关系，使得每当一个对象改变状态，则所有依赖于它的对象都会得到通知并被自动更新。" class="headerlink" title="15.观察者模式：定义对象间一种一对多的依赖关系，使得每当一个对象改变状态，则所有依赖于它的对象都会得到通知并被自动更新。"></a>15.观察者模式：定义对象间一种一对多的依赖关系，使得每当一个对象改变状态，则所有依赖于它的对象都会得到通知并被自动更新。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public abstract class Subject &#123;</span><br><span class="line">     //定义一个观察者数组</span><br><span class="line">     private Vector obsVector = new Vector();</span><br><span class="line">     //增加一个观察者</span><br><span class="line">     public void addObserver(Observer o)&#123;</span><br><span class="line">             this.obsVector.add(o);</span><br><span class="line">     &#125;</span><br><span class="line">     //删除一个观察者</span><br><span class="line">     public void delObserver(Observer o)&#123;</span><br><span class="line">             this.obsVector.remove(o);</span><br><span class="line">     &#125;</span><br><span class="line">     //通知所有观察者</span><br><span class="line">     public void notifyObservers()&#123;</span><br><span class="line">             for(Observer o:this.obsVector)&#123;</span><br><span class="line">                     o.update();</span><br><span class="line">&#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用场景：</p>
-<ol>
-<li><p>关联行为场景。需要注意的是，关联行为是可拆分的，而不是“组合”关系。</p>
-</li>
-<li><p>事件多级触发场景。</p>
-</li>
-<li><p>跨系统的消息交换场景，如消息队列的处理机制</p>
-</li>
-</ol>
-<h2 id="16-门面模式：要求一个子系统的外部与其内部的通信必须通过一个统一的对象进行。门面模式提供一个高层次的接口，使得子系统更易于使用。"><a href="#16-门面模式：要求一个子系统的外部与其内部的通信必须通过一个统一的对象进行。门面模式提供一个高层次的接口，使得子系统更易于使用。" class="headerlink" title="16.门面模式：要求一个子系统的外部与其内部的通信必须通过一个统一的对象进行。门面模式提供一个高层次的接口，使得子系统更易于使用。"></a>16.门面模式：要求一个子系统的外部与其内部的通信必须通过一个统一的对象进行。门面模式提供一个高层次的接口，使得子系统更易于使用。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class Facade &#123;</span><br><span class="line">    private subSystem1 subSystem1 = new subSystem1();</span><br><span class="line">    private subSystem2 subSystem2 = new subSystem2();</span><br><span class="line">    private subSystem3 subSystem3 = new subSystem3();</span><br><span class="line">    public void startSystem()&#123;</span><br><span class="line">        subSystem1.start();</span><br><span class="line">        subSystem2.start();         </span><br><span class="line">        subSystem3.start();</span><br><span class="line">    &#125;</span><br><span class="line">    public void stopSystem()&#123;</span><br><span class="line">        subSystem1.stop();</span><br><span class="line">        subSystem2.stop();         </span><br><span class="line">        subSystem3.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用场景：</p>
-<ol>
-<li><p>为一个复杂的模块或子系统提供一个供外界访问的接口</p>
-</li>
-<li><p>子系统相对独立——外界对子系统的访问只要黑箱操作即可</p>
-</li>
-<li><p>预防低水平人员带来的风险扩散</p>
-</li>
-</ol>
-<h2 id="17-备忘录模式：在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到原先保存的状态。"><a href="#17-备忘录模式：在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到原先保存的状态。" class="headerlink" title="17.备忘录模式：在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到原先保存的状态。"></a>17.备忘录模式：在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到原先保存的状态。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public class Originator &#123;</span><br><span class="line">    private String state;</span><br><span class="line">    /**</span><br><span class="line">*	工厂方法，返回一个新的备忘录对象</span><br><span class="line">     */</span><br><span class="line">    public Memento createMemento()&#123;</span><br><span class="line">        return new Memento(state);</span><br><span class="line">    &#125;</span><br><span class="line">    /**</span><br><span class="line">*	将发起人恢复到备忘录对象所记载的状态</span><br><span class="line">     */</span><br><span class="line">    public void restoreMemento(Memento memento)&#123;</span><br><span class="line">        this.state = memento.getState();</span><br><span class="line">    &#125;</span><br><span class="line">    public String getState() &#123;</span><br><span class="line">        return state;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setState(String state) &#123;</span><br><span class="line">        this.state = state;</span><br><span class="line">        System.out.println(&quot;当前状态：&quot; + this.state);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用场景：</p>
-<ol>
-<li><p>需要保存和恢复数据的相关状态场景。</p>
-</li>
-<li><p>提供一个可回滚（rollback）的操作。</p>
-</li>
-<li><p>需要监控的副本场景中。</p>
-</li>
-<li><p>数据库连接的事务管理就是用的备忘录模式。</p>
-</li>
-</ol>
-<h2 id="18-访问者模式：封装一些作用于某种数据结构中的各元素的操作，它可以在不改变数据结构的前提下定义作用于这些元素的新的操作。"><a href="#18-访问者模式：封装一些作用于某种数据结构中的各元素的操作，它可以在不改变数据结构的前提下定义作用于这些元素的新的操作。" class="headerlink" title="18.访问者模式：封装一些作用于某种数据结构中的各元素的操作，它可以在不改变数据结构的前提下定义作用于这些元素的新的操作。"></a>18.访问者模式：封装一些作用于某种数据结构中的各元素的操作，它可以在不改变数据结构的前提下定义作用于这些元素的新的操作。</h2><p>使用场景：</p>
-<ol>
-<li><p>一个对象结构包含很多类对象，它们有不同的接口，而你想对这些对象实施一些依赖于其具体类的操作，也就说是用迭代器模式已经不能胜任的情景。</p>
-</li>
-<li><p>需要对一个对象结构中的对象进行很多不同并且不相关的操作，而你想避免让这些操作“污染”这些对象的类。</p>
-</li>
-</ol>
-<h2 id="19-状态模式：当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。"><a href="#19-状态模式：当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。" class="headerlink" title="19.状态模式：当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。"></a>19.状态模式：当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。</h2><p>使用场景：</p>
-<ol>
-<li><p>行为随状态改变而改变的场景这也是状态模式的根本出发点，例如权限设计，人员的状态不同即使执行相同的行为结果也会不同，在这种情况下需要考虑使用状态模式。</p>
-</li>
-<li><p>条件、分支判断语句的替代者</p>
-</li>
-</ol>
-<h2 id="20-解释器模式：给定一门语言，定义它的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中的句子。"><a href="#20-解释器模式：给定一门语言，定义它的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中的句子。" class="headerlink" title="20.解释器模式：给定一门语言，定义它的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中的句子。"></a>20.解释器模式：给定一门语言，定义它的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中的句子。</h2><p>使用场景：</p>
-<ol>
-<li><p>重复发生的问题可以使用解释器模式</p>
-</li>
-<li><p>一个简单语法需要解释的场景</p>
-</li>
-</ol>
-<h2 id="21-享元模式：使用共享对象的方法，用来尽可能减少内存使用量以及分享资讯。"><a href="#21-享元模式：使用共享对象的方法，用来尽可能减少内存使用量以及分享资讯。" class="headerlink" title="21.享元模式：使用共享对象的方法，用来尽可能减少内存使用量以及分享资讯。"></a>21.享元模式：使用共享对象的方法，用来尽可能减少内存使用量以及分享资讯。</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">abstract class flywei&#123; &#125;</span><br><span class="line">public class Flyweight extends flywei&#123;</span><br><span class="line">    Object obj ;</span><br><span class="line">    public Flyweight(Object obj)&#123;</span><br><span class="line">        this.obj = obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class  FlyweightFactory&#123;     private HashMap data;</span><br><span class="line">    public FlyweightFactory()&#123; data = new HashMap&lt;&gt;();&#125;</span><br><span class="line">    public Flyweight getFlyweight(Object object)&#123;</span><br><span class="line">        if ( data.containsKey(object))&#123;</span><br><span class="line">            return data.get(object);</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            Flyweight flyweight = new Flyweight(object);</span><br><span class="line">            data.put(object,flyweight);</span><br><span class="line">            return flyweight;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用场景：</p>
-<ol>
-<li><p>系统中存在大量的相似对象。</p>
-</li>
-<li><p>细粒度的对象都具备较接近的外部状态，而且内部状态与环境无关，也就是说对象没有特定身份。</p>
-</li>
-<li><p>需要缓冲池的场景。</p>
-</li>
-</ol>
-<h2 id="22-桥梁模式：将抽象和实现解耦，使得两者可以独立地变化。"><a href="#22-桥梁模式：将抽象和实现解耦，使得两者可以独立地变化。" class="headerlink" title="22.桥梁模式：将抽象和实现解耦，使得两者可以独立地变化。"></a>22.桥梁模式：将抽象和实现解耦，使得两者可以独立地变化。</h2><p>Circle类将DrwaApi与Shape类进行了桥接，</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">interface DrawAPI &#123;</span><br><span class="line">    public void drawCircle(int radius, int x, int y);</span><br><span class="line">&#125;</span><br><span class="line">class RedCircle implements DrawAPI &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void drawCircle(int radius, int x, int y) &#123;</span><br><span class="line">        System.out.println(&quot;Drawing Circle[ color: red, radius: &quot;</span><br><span class="line">                + radius +&quot;, x: &quot; +x+&quot;, &quot;+ y +&quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class GreenCircle implements DrawAPI &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void drawCircle(int radius, int x, int y) &#123;</span><br><span class="line">        System.out.println(&quot;Drawing Circle[ color: green, radius: &quot;</span><br><span class="line">                + radius +&quot;, x: &quot; +x+&quot;, &quot;+ y +&quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">abstract class Shape &#123;</span><br><span class="line">    protected DrawAPI drawAPI;</span><br><span class="line">    protected Shape(DrawAPI drawAPI)&#123;</span><br><span class="line">        this.drawAPI = drawAPI;</span><br><span class="line">    &#125;</span><br><span class="line">    public abstract void draw();</span><br><span class="line">&#125;</span><br><span class="line">class Circle extends Shape &#123;</span><br><span class="line">    private int x, y, radius;</span><br><span class="line">    public Circle(int x, int y, int radius, DrawAPI drawAPI) &#123;</span><br><span class="line">        super(drawAPI);</span><br><span class="line">        this.x = x;</span><br><span class="line">        this.y = y;</span><br><span class="line">        this.radius = radius;</span><br><span class="line">    &#125;</span><br><span class="line">    public void draw() &#123;</span><br><span class="line">        drawAPI.drawCircle(radius,x,y);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//客户端使用代码</span><br><span class="line">Shape redCircle = new Circle(100,100, 10, new RedCircle()); Shape greenCircle = new Circle(100,100, 10, new GreenCircle()); redCircle.draw(); greenCircle.draw(); </span><br></pre></td></tr></table></figure>
-
-<p>使用场景：</p>
-<ol>
-<li><p>不希望或不适用使用继承的场景</p>
-</li>
-<li><p>接口或抽象类不稳定的场景</p>
-</li>
-<li><p>重用性要求较高的场景</p>
-</li>
-</ol>
-<h2 id="23-模板方法模式：定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。"><a href="#23-模板方法模式：定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。" class="headerlink" title="23.模板方法模式：定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。"></a>23.模板方法模式：定义一个操作中的算法的框架，而将一些步骤延迟到子类中。使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。</h2><p>使用场景：</p>
-<ol>
-<li><p>多个子类有公有的方法，并且逻辑基本相同时。</p>
-</li>
-<li><p>重要、复杂的算法，可以把核心算法设计为模板方法，周边的相关细节功能则由各个子类实现。</p>
-</li>
-<li><p>重构时，模板方法模式是一个经常使用的模式，把相同的代码抽取到父类中，然后通过钩子函数（见“模板方法模式的扩展”）约束其行为。</p>
-</li>
-</ol>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/10/09/22-23%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93%EF%BC%882020%E6%9C%80%E6%96%B0%E7%89%88%EF%BC%89/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
