@@ -1168,7 +1168,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #b9655d;
+  background: #29916b;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2337,6 +2337,9 @@ body {
 .post-body p a:hover {
   color: #0477ab;
   text-decoration: underline;
+}
+.container {
+  background-color: rgba(0,0,0,0.75);
 }
 .sidebar {
   transition-duration: 0.4s;
