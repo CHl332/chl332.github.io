@@ -1168,7 +1168,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #9df0a8;
+  background: #3c7440;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2335,6 +2335,14 @@ body {
   border-bottom: none;
 }
 .post-body p a:hover {
+  color: #0477ab;
+  text-decoration: underline;
+}
+.page-number current {
+  color: #000;
+  border-bottom: none;
+}
+.page-number current:hover {
   color: #0477ab;
   text-decoration: underline;
 }
